@@ -1165,16 +1165,16 @@
 
             let color, message;
             if (total >= 16) {
-                color = var(--green);
+                color = '#3fa796';
                 message = '✓ Strong candidate! This tool solves real problems with good integration and quick payoff.';
             } else if (total >= 14) {
-                color = var(--yellow);
+                color = '#f5b844';
                 message = '⚠️ Decent option. Proceed if it fills a critical gap in your stack.';
             } else if (total >= 10) {
-                color = var(--orange);
+                color = '#e8873a';
                 message = '⚡ Probably not worth it. The switching costs or integration friction might outweigh the benefits.';
             } else {
-                color = var(--red);
+                color = '#e74c3c';
                 message = '✕ Pass. This tool doesn\'t meet enough of your needs right now.';
             }
 

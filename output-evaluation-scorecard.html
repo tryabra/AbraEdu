@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>AI Output Evaluation Scorecard | Abra AI</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --teal: #2a6171;
+    --teal-light: #e8f0f3;
+    --teal-mid: #d0e2e7;
+    --orange: #e8873a;
+    --orange-light: #fef3e8;
+    --dark: #1a1a2e;
+    --gray-50: #f8f9fa;
+    --gray-100: #f1f3f5;
+    --gray-200: #e9ecef;
+    --gray-300: #dee2e6;
+    --gray-400: #ced4da;
+    --gray-500: #adb5bd;
+    --gray-600: #868e96;
+    --gray-700: #495057;
+    --gray-800: #343a40;
+    --red: #e74c3c;
+    --red-light: #fdeaea;
+    --yellow: #f0ad4e;
+    --yellow-light: #fef9e7;
+    --green: #27ae60;
+    --green-light: #e8f8ef;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--gray-50);
+    color: var(--dark);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px 16px 60px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 32px 0 24px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    margin-bottom: 8px;
+  }
+
+  .logo-m { color: var(--teal); font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+  .logo-v { color: var(--orange); font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+  .logo-text { font-size: 13px; color: var(--gray-600); letter-spacing: 2px; text-transform: uppercase; margin-top: -2px; }
+
+  .header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-top: 16px;
+    line-height: 1.2;
+  }
+
+  .header p {
+    font-size: 15px;
+    color: var(--gray-600);
+    margin-top: 8px;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .badges {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .badge-teal { background: var(--teal-light); border: 1px solid var(--teal-mid); color: var(--teal); }
+  .badge-orange { background: var(--orange-light); border: 1px solid var(--orange); color: var(--orange); }
+
+  /* Input area */
+  .input-section { margin-top: 32px; }
+
+  .section-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin-bottom: 8px;
+  }
+
+  .section-sublabel {
+    font-size: 13px;
+    color: var(--gray-500);
+    margin-bottom: 8px;
+    font-weight: 400;
+  }
+
+  textarea {
+    width: 100%;
+    border: 2px solid var(--gray-300);
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 15px;
+    font-family: inherit;
+    line-height: 1.6;
+    color: var(--dark);
+    background: #fff;
+    resize: vertical;
+    transition: border-color 0.2s;
+  }
+
+  textarea:focus { outline: none; border-color: var(--teal); }
+  textarea::placeholder { color: var(--gray-400); }
+
+  .prompt-input { min-height: 70px; font-size: 14px; margin-top: 16px; }
+  .output-input { min-height: 160px; }
+
+  /* Quick check */
+  .quick-check {
+    background: linear-gradient(135deg, var(--teal) 0%, #1f4a54 100%);
+    color: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .quick-check-title {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    opacity: 0.9;
+  }
+
+  .quick-check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .quick-check-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .quick-check-text { opacity: 0.95; }
+
+  /* Evaluate button */
+  .evaluate-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .evaluate-btn:hover { background: #235567; }
+  .evaluate-btn:disabled { background: var(--gray-400); cursor: not-allowed; }
+
+  /* Loading */
+  .loading { display: none; text-align: center; padding: 40px 0; }
+  .loading.show { display: block; }
+
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--gray-200);
+    border-top: 4px solid var(--teal);
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-text { font-size: 14px; color: var(--gray-600); }
+  .loading-sub { font-size: 12px; color: var(--gray-500); margin-top: 4px; }
+
+  /* Error */
+  .error-msg {
+    display: none;
+    background: var(--red-light);
+    border: 1px solid var(--red);
+    color: var(--red);
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    margin-top: 16px;
+    line-height: 1.5;
+  }
+
+  .error-msg.show { display: block; }
+
+  /* Results */
+  .results { display: none; margin-top: 32px; }
+  .results.show { display: block; }
+
+  /* Verdict */
+  .verdict-card {
+    text-align: center;
+    padding: 32px 24px;
+    border-radius: 16px;
+    border: 2px solid;
+  }
+
+  .verdict-card.pass { background: var(--green-light); border-color: var(--green); }
+  .verdict-card.flag { background: var(--yellow-light); border-color: var(--yellow); }
+  .verdict-card.fail { background: var(--red-light); border-color: var(--red); }
+
+  .verdict-icon { font-size: 48px; margin-bottom: 8px; }
+
+  .verdict-label {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+
+  .verdict-card.pass .verdict-label { color: var(--green); }
+  .verdict-card.flag .verdict-label { color: var(--yellow); }
+  .verdict-card.fail .verdict-label { color: var(--red); }
+
+  .verdict-summary {
+    font-size: 15px;
+    color: var(--gray-700);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  /* Score bar */
+  .score-bar-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 20px;
+    padding: 16px 20px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--gray-200);
+  }
+
+  .score-bar-label { font-size: 14px; font-weight: 600; color: var(--gray-700); white-space: nowrap; }
+
+  .score-bar-track {
+    flex: 1;
+    height: 12px;
+    background: var(--gray-200);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 1s ease;
+  }
+
+  .score-bar-value {
+    font-size: 20px;
+    font-weight: 800;
+    min-width: 50px;
+    text-align: right;
+  }
+
+  /* Filter cards */
+  .filter-card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--gray-200);
+    margin-top: 16px;
+    overflow: hidden;
+  }
+
+  .filter-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .filter-header:hover { background: var(--gray-50); }
+
+  .filter-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .filter-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .filter-icon.pass { background: var(--green-light); }
+  .filter-icon.flag { background: var(--yellow-light); }
+  .filter-icon.fail { background: var(--red-light); }
+
+  .filter-name { font-size: 15px; font-weight: 600; color: var(--dark); }
+  .filter-subtitle { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+
+  .filter-verdict-badge {
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  .filter-verdict-badge.pass { background: var(--green-light); color: var(--green); }
+  .filter-verdict-badge.flag { background: var(--yellow-light); color: var(--yellow); }
+  .filter-verdict-badge.fail { background: var(--red-light); color: var(--red); }
+
+  .filter-body {
+    padding: 0 20px 20px;
+    display: none;
+  }
+
+  .filter-body.open { display: block; }
+
+  .filter-detail {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--gray-100);
+  }
+
+  .filter-detail:last-child { border-bottom: none; }
+
+  .filter-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+
+  .filter-detail-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-800);
+  }
+
+  .filter-detail-status {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+
+  .filter-detail-status.pass { background: var(--green-light); color: var(--green); }
+  .filter-detail-status.flag { background: var(--yellow-light); color: var(--yellow); }
+  .filter-detail-status.fail { background: var(--red-light); color: var(--red); }
+
+  .filter-detail-text {
+    font-size: 13px;
+    color: var(--gray-600);
+    line-height: 1.5;
+  }
+
+  /* Failure modes */
+  .failure-section {
+    margin-top: 20px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--gray-200);
+    padding: 20px;
+  }
+
+  .failure-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .failure-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  @media (max-width: 500px) { .failure-grid { grid-template-columns: 1fr; } }
+
+  .failure-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .failure-item.detected { background: var(--red-light); color: var(--red); }
+  .failure-item.clear { background: var(--green-light); color: var(--green); }
+
+  .failure-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .failure-item.detected .failure-dot { background: var(--red); }
+  .failure-item.clear .failure-dot { background: var(--green); }
+
+  /* Recommendations */
+  .recs-section {
+    margin-top: 20px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--gray-200);
+    padding: 20px;
+  }
+
+  .recs-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .rec-item {
+    display: flex;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 14px;
+    color: var(--gray-700);
+    line-height: 1.5;
+  }
+
+  .rec-item:last-child { border-bottom: none; }
+  .rec-icon { flex-shrink: 0; font-size: 16px; margin-top: 1px; }
+
+  /* Improved prompt suggestion */
+  .improved-section {
+    margin-top: 20px;
+  }
+
+  .improved-label {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .improved-prompt {
+    background: #fff;
+    border: 2px solid var(--orange);
+    border-radius: 12px;
+    padding: 20px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--dark);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .copy-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: background 0.2s;
+  }
+
+  .copy-btn:hover { background: #d4782f; }
+  .copy-btn.copied { background: var(--green); }
+
+  /* Reset */
+  .reset-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: none;
+    color: var(--teal);
+    border: 2px solid var(--teal);
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: all 0.2s;
+  }
+
+  .reset-btn:hover { background: var(--teal-light); }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="logo">
+      <span class="logo-m">M</span><span class="logo-v">V</span>
+    </div>
+    <div class="logo-text">Abra AI</div>
+    <h1>Output Evaluation Scorecard</h1>
+    <p>Paste any AI output. Get an instant evaluation of its logic, specificity, and expertise — with specific issues flagged and recommendations to fix them.</p>
+    <div class="badges">
+      <div class="badge badge-teal">3 Filters: Logic · Specificity · Expertise</div>
+      <div class="badge badge-orange">&#9889; AI-Powered Analysis</div>
+    </div>
+  </div>
+
+  <!-- Quick Check Reference -->
+  <div class="quick-check">
+    <div class="quick-check-title">The 10-Second Gut Check</div>
+    <div class="quick-check-item">
+      <span class="quick-check-icon">&#128176;</span>
+      <span class="quick-check-text"><strong>Would I stake money on this?</strong> Do you trust the claims enough to base a business decision on them?</span>
+    </div>
+    <div class="quick-check-item">
+      <span class="quick-check-icon">&#127919;</span>
+      <span class="quick-check-text"><strong>Is this specific enough to act on?</strong> Can you implement this Monday morning for your situation?</span>
+    </div>
+    <div class="quick-check-item">
+      <span class="quick-check-icon">&#129504;</span>
+      <span class="quick-check-text"><strong>Am I learning something new?</strong> Is this tailored insight or generic advice you already know?</span>
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div class="input-section">
+    <div class="section-label">Paste the AI output you want to evaluate</div>
+    <textarea class="output-input" id="aiOutput" placeholder="Paste the full AI response here..."></textarea>
+
+    <div class="section-label" style="margin-top: 16px;">What did you ask the AI? <span style="font-weight:400;color:var(--gray-500)">(optional but helps)</span></div>
+    <textarea class="prompt-input" id="originalPrompt" placeholder="The original prompt you used to get this output..."></textarea>
+  </div>
+
+  <button class="evaluate-btn" id="evaluateBtn" onclick="evaluate()">
+    <span>&#9889;</span> Evaluate This Output
+  </button>
+
+  <div class="error-msg" id="errorMsg"></div>
+
+  <div class="loading" id="loading">
+    <div class="loading-spinner"></div>
+    <div class="loading-text" id="loadingText">AI is evaluating the output...</div>
+    <div class="loading-sub">Checking logic, specificity, and expertise</div>
+  </div>
+
+  <!-- Results -->
+  <div class="results" id="results">
+    <div id="verdictCard"></div>
+    <div id="scoreBar"></div>
+    <div id="filterCards"></div>
+    <div id="failureSection"></div>
+    <div id="recsSection"></div>
+    <div id="improvedSection"></div>
+    <button class="reset-btn" onclick="resetAll()">&#8634; Evaluate Another Output</button>
+  </div>
+</div>
+
+<script>
+  const API_KEY = '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';
+  const MODEL = 'google/gemini-flash-1.5';
+  const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+
+  let evaluationData = null;
+
+  async function callAI(aiOutput, originalPrompt) {
+    const systemPrompt = `You are an expert AI output evaluator. Your job is to critically evaluate AI-generated content using three filters: Logic, Specificity, and Expertise.
+
+You must return a JSON object with this exact structure (no markdown, no code blocks, just raw JSON):
+
+{
+  "overallVerdict": "pass" | "flag" | "fail",
+  "overallScore": <number 0-100>,
+  "overallSummary": "<1-2 sentence summary of the evaluation>",
+  "filters": {
+    "logic": {
+      "verdict": "pass" | "flag" | "fail",
+      "criteria": [
+        {
+          "name": "Cause and Effect",
+          "status": "pass" | "flag" | "fail",
+          "explanation": "<1 sentence explaining why>"
+        },
+        {
+          "name": "Numbers and Math",
+          "status": "pass" | "flag" | "fail",
+          "explanation": "<1 sentence>"
+        },
+        {
+          "name": "Internal Consistency",
+          "status": "pass" | "flag" | "fail",
+          "explanation": "<1 sentence>"
+        },
+        {
+          "name": "Proportionality",
+          "status": "pass" | "flag" | "fail",
+          "explanation": "<1 sentence>"
+        }
+      ]
+    },
+    "specificity": {
+      "verdict": "pass" | "flag" | "fail",
+      "criteria": [
+        {
+          "name": "Business Relevance",
+          "status": "pass" | "flag" | "fail",
+          "explanation": "<1 sentence>"
+        },
+        {
+          "name": "Actionability",
+          "status": "pass" | "flag" | "fail",
+          "explanation": "<1 sentence>"
+        },
+        {
+          "name": "Concrete Details",
+          "status": "pass" | "flag" | "fail",
+          "explanation": "<1 sentence>"
+        },
+        {
+          "name": "Situation Awareness",
+          "status": "pass" | "flag" | "fail",
+          "explanation": "<1 sentence>"
+        }
+      ]
+    },
+    "expertise": {
+      "verdict": "pass" | "flag" | "fail",
+      "criteria": [
+        {
+          "name": "Domain Knowledge",
+          "status": "pass" | "flag" | "fail",
+          "explanation": "<1 sentence>"
+        },
+        {
+          "name": "Nuance and Depth",
+          "status": "pass" | "flag" | "fail",
+          "explanation": "<1 sentence>"
+        },
+        {
+          "name": "Real-World Grounding",
+          "status": "pass" | "flag" | "fail",
+          "explanation": "<1 sentence>"
+        },
+        {
+          "name": "Beyond Surface Level",
+          "status": "pass" | "flag" | "fail",
+          "explanation": "<1 sentence>"
+        }
+      ]
+    }
+  },
+  "failureModes": {
+    "hallucination": <boolean>,
+    "genericAdvice": <boolean>,
+    "missingContext": <boolean>,
+    "logicalGap": <boolean>,
+    "overConfidence": <boolean>,
+    "hedging": <boolean>
+  },
+  "recommendations": ["<specific actionable recommendation 1>", "<recommendation 2>", "<recommendation 3>"],
+  "improvedPrompt": "<if the output has issues, suggest a better prompt that would get a better result. If the output is good, leave empty string>"
+}
+
+Evaluation rules:
+- Be critical but fair. Most AI outputs have at least some issues.
+- "pass" = solid, no concerns. "flag" = some issues, usable with caution. "fail" = significant problems, don't trust this.
+- Overall score: 80-100 = strong output, 50-79 = needs work, 0-49 = significant issues.
+- Recommendations should be specific to THIS output, not generic advice.
+- The improved prompt should fix the specific weaknesses you identified.
+- Be blunt and direct in explanations. No fluff.
+- Return ONLY the JSON object. No other text.`;
+
+    const userMessage = `${originalPrompt ? `Original prompt: "${originalPrompt}"\n\n` : ''}AI Output to evaluate:\n\n${aiOutput}`;
+
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${API_KEY}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://abra-ai.com',
+        'X-Title': 'Abra AI Output Scorecard'
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userMessage }
+        ],
+        temperature: 0.3,
+        max_tokens: 1500
+      })
+    });
+
+    if (!response.ok) {
+      const err = await response.text();
+      throw new Error(`API error (${response.status}): ${err}`);
+    }
+
+    const data = await response.json();
+    let content = data.choices[0].message.content.trim();
+
+    // Strip markdown code blocks if present
+    content = content.replace(/^```json?\s*/i, '').replace(/\s*```$/i, '');
+
+    return JSON.parse(content);
+  }
+
+  async function evaluate() {
+    const output = document.getElementById('aiOutput').value.trim();
+    const errorMsg = document.getElementById('errorMsg');
+    errorMsg.classList.remove('show');
+
+    if (!output) {
+      document.getElementById('aiOutput').style.borderColor = 'var(--red)';
+      setTimeout(() => document.getElementById('aiOutput').style.borderColor = 'var(--gray-300)', 1500);
+      return;
+    }
+
+    if (output.length < 20) {
+      errorMsg.textContent = 'Paste the full AI output — a couple words isn\'t enough to evaluate.';
+      errorMsg.classList.add('show');
+      return;
+    }
+
+    const prompt = document.getElementById('originalPrompt').value.trim();
+    const loading = document.getElementById('loading');
+    const results = document.getElementById('results');
+    const btn = document.getElementById('evaluateBtn');
+
+    results.classList.remove('show');
+    loading.classList.add('show');
+    btn.disabled = true;
+    btn.innerHTML = '<span>&#9889;</span> Evaluating...';
+
+    try {
+      evaluationData = await callAI(output, prompt);
+      loading.classList.remove('show');
+      renderResults(evaluationData);
+      results.classList.add('show');
+      results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (err) {
+      loading.classList.remove('show');
+      errorMsg.textContent = 'Evaluation failed. ' + err.message;
+      errorMsg.classList.add('show');
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = '<span>&#9889;</span> Evaluate This Output';
+  }
+
+  function renderResults(data) {
+    renderVerdict(data);
+    renderScoreBar(data);
+    renderFilterCards(data);
+    renderFailureModes(data);
+    renderRecommendations(data);
+    renderImprovedPrompt(data);
+  }
+
+  function renderVerdict(data) {
+    const el = document.getElementById('verdictCard');
+    const icons = { pass: '&#10003;', flag: '&#9888;', fail: '&#10007;' };
+    const labels = { pass: 'Trustworthy Output', flag: 'Use With Caution', fail: 'Don\'t Trust This' };
+
+    el.innerHTML = `
+      <div class="verdict-card ${data.overallVerdict}">
+        <div class="verdict-icon">${icons[data.overallVerdict]}</div>
+        <div class="verdict-label">${labels[data.overallVerdict]}</div>
+        <div class="verdict-summary">${escapeHtml(data.overallSummary)}</div>
+      </div>
+    `;
+  }
+
+  function renderScoreBar(data) {
+    const el = document.getElementById('scoreBar');
+    const score = data.overallScore;
+    const color = score >= 80 ? 'var(--green)' : score >= 50 ? 'var(--yellow)' : 'var(--red)';
+
+    el.innerHTML = `
+      <div class="score-bar-section">
+        <div class="score-bar-label">Trust Score</div>
+        <div class="score-bar-track">
+          <div class="score-bar-fill" style="width: ${score}%; background: ${color};"></div>
+        </div>
+        <div class="score-bar-value" style="color: ${color}">${score}</div>
+      </div>
+    `;
+  }
+
+  function renderFilterCards(data) {
+    const el = document.getElementById('filterCards');
+    const filters = [
+      { key: 'logic', name: 'Logic Check', subtitle: 'Are the claims reasonable and consistent?', icon: '&#129504;' },
+      { key: 'specificity', name: 'Specificity Check', subtitle: 'Is this specific enough to act on?', icon: '&#127919;' },
+      { key: 'expertise', name: 'Expertise Check', subtitle: 'Does this reflect real domain knowledge?', icon: '&#128218;' }
+    ];
+
+    el.innerHTML = filters.map((f, idx) => {
+      const filter = data.filters[f.key];
+      return `
+        <div class="filter-card">
+          <div class="filter-header" onclick="toggleFilter(${idx})">
+            <div class="filter-header-left">
+              <div class="filter-icon ${filter.verdict}">${f.icon}</div>
+              <div>
+                <div class="filter-name">${f.name}</div>
+                <div class="filter-subtitle">${f.subtitle}</div>
+              </div>
+            </div>
+            <div class="filter-verdict-badge ${filter.verdict}">${filter.verdict.charAt(0).toUpperCase() + filter.verdict.slice(1)}</div>
+          </div>
+          <div class="filter-body" id="filterBody${idx}">
+            ${filter.criteria.map(c => `
+              <div class="filter-detail">
+                <div class="filter-detail-header">
+                  <div class="filter-detail-label">${escapeHtml(c.name)}</div>
+                  <div class="filter-detail-status ${c.status}">${c.status.charAt(0).toUpperCase() + c.status.slice(1)}</div>
+                </div>
+                <div class="filter-detail-text">${escapeHtml(c.explanation)}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function toggleFilter(idx) {
+    const body = document.getElementById('filterBody' + idx);
+    body.classList.toggle('open');
+  }
+
+  function renderFailureModes(data) {
+    const el = document.getElementById('failureSection');
+    const modes = data.failureModes;
+    const labels = {
+      hallucination: 'Hallucination',
+      genericAdvice: 'Generic Advice',
+      missingContext: 'Missing Context',
+      logicalGap: 'Logical Gap',
+      overConfidence: 'Over-Confidence',
+      hedging: 'Excessive Hedging'
+    };
+
+    const detected = Object.entries(modes).filter(([k, v]) => v);
+    const clear = Object.entries(modes).filter(([k, v]) => !v);
+
+    el.innerHTML = `
+      <div class="failure-section">
+        <div class="failure-title">Failure Mode Scan</div>
+        <div class="failure-grid">
+          ${detected.map(([k]) => `
+            <div class="failure-item detected">
+              <div class="failure-dot"></div>
+              ${labels[k]} Detected
+            </div>
+          `).join('')}
+          ${clear.map(([k]) => `
+            <div class="failure-item clear">
+              <div class="failure-dot"></div>
+              ${labels[k]} Clear
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderRecommendations(data) {
+    const el = document.getElementById('recsSection');
+    if (!data.recommendations || data.recommendations.length === 0) {
+      el.innerHTML = '';
+      return;
+    }
+
+    el.innerHTML = `
+      <div class="recs-section">
+        <div class="recs-title">What To Do Next</div>
+        ${data.recommendations.map(r => `
+          <div class="rec-item">
+            <div class="rec-icon">&#8594;</div>
+            <div>${escapeHtml(r)}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  function renderImprovedPrompt(data) {
+    const el = document.getElementById('improvedSection');
+    if (!data.improvedPrompt) {
+      el.innerHTML = '';
+      return;
+    }
+
+    el.innerHTML = `
+      <div class="improved-section">
+        <div class="improved-label">&#128161; Try this prompt instead</div>
+        <div class="improved-prompt">${escapeHtml(data.improvedPrompt)}</div>
+        <button class="copy-btn" id="copyBtn" onclick="copyImproved()">&#128203; Copy Improved Prompt</button>
+      </div>
+    `;
+  }
+
+  function copyImproved() {
+    const btn = document.getElementById('copyBtn');
+    const text = evaluationData.improvedPrompt;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.classList.add('copied');
+      btn.innerHTML = '&#10003; Copied!';
+      setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '&#128203; Copy Improved Prompt'; }, 2000);
+    }).catch(() => {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      btn.classList.add('copied');
+      btn.innerHTML = '&#10003; Copied!';
+      setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '&#128203; Copy Improved Prompt'; }, 2000);
+    });
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  function resetAll() {
+    document.getElementById('aiOutput').value = '';
+    document.getElementById('originalPrompt').value = '';
+    document.getElementById('results').classList.remove('show');
+    document.getElementById('errorMsg').classList.remove('show');
+    evaluationData = null;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.getElementById('aiOutput').focus();
+  }
+</script>
+</body>
+</html>

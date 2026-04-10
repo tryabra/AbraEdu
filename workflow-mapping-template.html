@@ -1,0 +1,1772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workflow Mapping Template | Abra AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #fafafa;
+            color: #2d2d2d;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .logo-mv {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: -2px;
+        }
+
+        .logo-m {
+            color: #2a6171;
+        }
+
+        .logo-v {
+            color: #e8873a;
+        }
+
+        .logo-label {
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 2rem;
+        }
+
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .progress-step {
+            padding: 0.75rem;
+            text-align: center;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: #e8f0f3;
+            color: #666;
+            border: 1px solid #c5dfe5;
+            position: relative;
+        }
+
+        .progress-step.active {
+            background: #2a6171;
+            color: white;
+            border-color: #2a6171;
+            box-shadow: 0 2px 8px rgba(42, 97, 113, 0.3);
+        }
+
+        .progress-step.complete {
+            background: #e8f0f3;
+            color: #2a6171;
+            border-color: #2a6171;
+        }
+
+        .progress-step.complete::after {
+            content: '✓';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #2a6171;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .progress-step:not(.active) {
+            cursor: pointer;
+        }
+
+        .progress-step:not(.active):hover {
+            background: #d9e8ed;
+        }
+
+        .phase {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            display: none;
+        }
+
+        .phase.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            color: #2a6171;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        h3 {
+            color: #2a6171;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #2d2d2d;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #2a6171;
+            box-shadow: 0 0 0 3px rgba(42, 97, 113, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .calculator-box {
+            background: #e8f0f3;
+            border-left: 4px solid #2a6171;
+            padding: 1.5rem;
+            border-radius: 4px;
+            margin-top: 2rem;
+        }
+
+        .calculator-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .calc-output {
+            background: white;
+            padding: 1rem;
+            border-radius: 4px;
+            border: 1px solid #c5dfe5;
+        }
+
+        .calc-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+
+        .calc-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2a6171;
+        }
+
+        .step-builder {
+            margin-top: 2rem;
+        }
+
+        .step-item {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .step-item.ai-candidate {
+            background: #f0fafb;
+            border-color: #2a6171;
+            border-left: 4px solid #2a6171;
+        }
+
+        .step-item.manual-step {
+            background: #fafafa;
+            border-color: #ddd;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: #e8f0f3;
+            color: #2a6171;
+            border-radius: 50%;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .step-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .badge-ai {
+            background: #2a6171;
+            color: white;
+        }
+
+        .badge-manual {
+            background: #ddd;
+            color: #666;
+        }
+
+        .step-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #2a6171;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1f4556;
+            box-shadow: 0 2px 8px rgba(42, 97, 113, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e8f0f3;
+            color: #2a6171;
+            border: 1px solid #c5dfe5;
+        }
+
+        .btn-secondary:hover {
+            background: #d9e8ed;
+        }
+
+        .btn-danger {
+            background: #f5f5f5;
+            color: #d32f2f;
+            border: 1px solid #ddd;
+        }
+
+        .btn-danger:hover {
+            background: #ffebee;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .toggle-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .toggle {
+            display: inline-flex;
+            align-items: center;
+            width: 50px;
+            height: 28px;
+            background: #ddd;
+            border-radius: 14px;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.3s ease;
+            border: none;
+            padding: 0;
+        }
+
+        .toggle.active {
+            background: #2a6171;
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: left 0.3s ease;
+        }
+
+        .toggle.active::after {
+            left: 24px;
+        }
+
+        .summary-box {
+            background: #fef3e8;
+            border-left: 4px solid #e8873a;
+            padding: 1.5rem;
+            border-radius: 4px;
+            margin-top: 2rem;
+        }
+
+        .summary-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .summary-item {
+            padding: 0;
+        }
+
+        .summary-label {
+            font-size: 0.85rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+
+        .summary-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #e8873a;
+        }
+
+        .roi-box {
+            background: linear-gradient(135deg, #2a6171 0%, #1f4556 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .roi-label {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .roi-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .roi-interpretation {
+            font-size: 0.95rem;
+            opacity: 0.95;
+        }
+
+        .roi-interpretation.strong {
+            color: #4ade80;
+        }
+
+        .roi-interpretation.moderate {
+            color: #fbbf24;
+        }
+
+        .roi-interpretation.weak {
+            color: #f87171;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .comparison-table th {
+            background: #e8f0f3;
+            color: #2a6171;
+            font-weight: 600;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:hover {
+            background: #fafafa;
+        }
+
+        .highlight-green {
+            color: #2e7d32;
+            font-weight: 600;
+        }
+
+        .highlight-orange {
+            color: #e8873a;
+            font-weight: 600;
+        }
+
+        .ai-filter-group {
+            background: #f0fafb;
+            border: 1px solid #c5dfe5;
+            padding: 1.5rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+        }
+
+        .ai-filter-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #c5dfe5;
+        }
+
+        .ai-filter-title {
+            font-weight: 600;
+            color: #2a6171;
+            flex: 1;
+        }
+
+        .ai-score {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #2a6171;
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .ai-score.partial {
+            background: #e8873a;
+        }
+
+        .ai-filter-questions {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .ai-question {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .ai-question-label {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #666;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .progress-bar {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .progress-step {
+                padding: 0.5rem 0.25rem;
+                font-size: 0.8rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .step-content {
+                grid-template-columns: 1fr;
+            }
+
+            .step-header {
+                flex-wrap: wrap;
+            }
+
+            .step-badge {
+                margin-left: 0;
+                margin-top: 0.5rem;
+            }
+
+            .container {
+                padding: 0 1rem 1rem;
+            }
+
+            .phase {
+                padding: 1.5rem 1rem;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .nav-buttons button {
+                width: 100%;
+            }
+
+            .roi-box {
+                padding: 1.5rem 1rem;
+            }
+
+            .roi-value {
+                font-size: 2rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        .step-move-buttons {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .step-move-buttons button {
+            padding: 0.3rem 0.5rem;
+            font-size: 0.75rem;
+            min-width: 32px;
+        }
+
+        .phase-description {
+            color: #666;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            color: #856404;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            color: #155724;
+        }
+
+        .input-suffix {
+            position: relative;
+        }
+
+        .input-suffix input {
+            padding-right: 2rem;
+        }
+
+        .input-suffix-text {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-mv">
+                    <span class="logo-m">M</span><span class="logo-v">V</span>
+                </div>
+                <div class="logo-label">Abra AI</div>
+            </div>
+            <h1 style="margin-left: auto; font-size: 1.5rem; color: #2a6171;">Workflow Mapping Template</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <!-- PHASE 1: Define the Process -->
+        <div class="phase active" id="phase1">
+            <h2>Phase 1: Define the Process</h2>
+            <p class="phase-description">Start by documenting what this workflow is, what triggers it, and how often it runs. We'll calculate the current cost to establish your baseline for ROI.</p>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="processName">Process Name</label>
+                    <input type="text" id="processName" placeholder="e.g., Lead Qualification, Invoice Processing">
+                </div>
+                <div class="form-group">
+                    <label for="processFrequency">How Often Does It Run?</label>
+                    <select id="processFrequency">
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="per-customer">Per Customer</option>
+                        <option value="per-lead">Per Lead</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="trigger">What Triggers This Process?</label>
+                <input type="text" id="trigger" placeholder="e.g., New lead arrives, Invoice submitted, Customer request">
+            </div>
+
+            <div class="form-group">
+                <label for="endResult">What Is the End Result?</label>
+                <input type="text" id="endResult" placeholder="e.g., Qualified lead in CRM, Paid invoice, Customer onboarded">
+            </div>
+
+            <div class="form-group">
+                <label for="whoInvolved">Who Is Involved?</label>
+                <input type="text" id="whoInvolved" placeholder="e.g., Sales team, Accounting, Customer success">
+            </div>
+
+            <h3>Cost Calculator</h3>
+            <div class="calculator-box">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="timePerOccurrence">Time per Occurrence (minutes)</label>
+                        <input type="number" id="timePerOccurrence" placeholder="0" min="0" step="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="frequencyPerMonth">Frequency per Month</label>
+                        <input type="number" id="frequencyPerMonth" placeholder="0" min="0" step="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="hourlyRate">Your Hourly Rate ($)</label>
+                        <input type="number" id="hourlyRate" placeholder="0" min="0" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="errorCost">Error/Inconsistency Cost per Month ($)</label>
+                        <input type="number" id="errorCost" placeholder="0" min="0" step="0.01">
+                    </div>
+                </div>
+
+                <div class="summary-row">
+                    <div class="calc-output">
+                        <div class="calc-label">Total Hours/Month</div>
+                        <div class="calc-value" id="totalHoursMonth">0.0</div>
+                    </div>
+                    <div class="calc-output">
+                        <div class="calc-label">Monthly Process Cost</div>
+                        <div class="calc-value" id="monthlyProcessCost">$0.00</div>
+                    </div>
+                    <div class="calc-output">
+                        <div class="calc-label">Total Monthly Cost</div>
+                        <div class="calc-value" id="totalMonthlyCost">$0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" style="visibility: hidden;">← Previous</button>
+                <button class="btn btn-primary" onclick="goToPhase(2)">Next: Map Current Workflow →</button>
+            </div>
+        </div>
+
+        <!-- PHASE 2: Map Current Workflow -->
+        <div class="phase" id="phase2">
+            <h2>Phase 2: Map Current Workflow</h2>
+            <p class="phase-description">Break down your process into individual steps. For each step, document who does it, how long it takes, what tools are used, and what pain points exist.</p>
+
+            <div class="step-builder" id="stepBuilder">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📋</div>
+                    <p>No steps added yet. Click "Add Step" to begin mapping your workflow.</p>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="addStep()">+ Add Step</button>
+
+            <div class="summary-box" id="phase2Summary">
+                <h3 style="margin-top: 0;">Workflow Summary</h3>
+                <div class="summary-row">
+                    <div class="summary-item">
+                        <div class="summary-label">Total Steps</div>
+                        <div class="summary-value" id="totalSteps">0</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Total Time</div>
+                        <div class="summary-value" id="totalTime">0 min</div>
+                    </div>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <div class="summary-label">Main Bottlenecks</div>
+                    <div id="bottlenecks" style="margin-top: 0.5rem; color: #2d2d2d;"></div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="goToPhase(1)">← Previous</button>
+                <button class="btn btn-primary" onclick="goToPhase(3)">Next: Identify AI Opportunities →</button>
+            </div>
+        </div>
+
+        <!-- PHASE 3: Identify AI Opportunities -->
+        <div class="phase" id="phase3">
+            <h2>Phase 3: Identify AI Opportunities</h2>
+            <p class="phase-description">For each step in your workflow, answer 4 questions to determine if it's a good candidate for AI automation. Steps with 3+ "yes" answers are AI candidates.</p>
+
+            <div id="aiOpportunitiesContainer">
+                <div class="empty-state">
+                    <div class="empty-state-icon">🤖</div>
+                    <p>Add steps in Phase 2 first. Then come back here to evaluate AI opportunities.</p>
+                </div>
+            </div>
+
+            <div class="summary-box" id="phase3Summary" style="display: none;">
+                <h3 style="margin-top: 0;">AI Opportunity Summary</h3>
+                <div class="summary-row">
+                    <div class="summary-item">
+                        <div class="summary-label">AI Candidates</div>
+                        <div class="summary-value" id="aiCandidateCount">0</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Time That Could Be Saved</div>
+                        <div class="summary-value" id="potentialTimeSaved">0 hrs/mo</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="goToPhase(2)">← Previous</button>
+                <button class="btn btn-primary" onclick="goToPhase(4)">Next: Design New Workflow →</button>
+            </div>
+        </div>
+
+        <!-- PHASE 4: Design New Workflow -->
+        <div class="phase" id="phase4">
+            <h2>Phase 4: Design New Workflow</h2>
+            <p class="phase-description">Now that you've identified AI opportunities, redesign your workflow with automated steps. Define what triggers each step and whether human review is needed.</p>
+
+            <div id="newWorkflowContainer">
+                <div class="empty-state">
+                    <div class="empty-state-icon">🔄</div>
+                    <p>Add steps in Phase 2 and identify AI opportunities in Phase 3 first.</p>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="goToPhase(3)">← Previous</button>
+                <button class="btn btn-primary" onclick="goToPhase(5)">Next: Implementation Plan →</button>
+            </div>
+        </div>
+
+        <!-- PHASE 5: Implementation Plan -->
+        <div class="phase" id="phase5">
+            <h2>Phase 5: Implementation Plan</h2>
+            <p class="phase-description">Prioritize your AI implementations, estimate setup time, and calculate ROI. Focus on quick wins that deliver the most value.</p>
+
+            <div id="implementationContainer">
+                <div class="empty-state">
+                    <div class="empty-state-icon">🎯</div>
+                    <p>Identify AI candidates in Phase 3 first to create your implementation plan.</p>
+                </div>
+            </div>
+
+            <div class="roi-box" id="roiBoxPhase5" style="display: none;">
+                <div class="roi-label">Payback Period</div>
+                <div class="roi-value" id="paybackPeriod">—</div>
+                <div class="roi-interpretation" id="roiInterpretation"></div>
+            </div>
+
+            <div class="summary-box" id="phase5Summary" style="display: none;">
+                <h3 style="margin-top: 0;">Implementation Totals</h3>
+                <div class="summary-row">
+                    <div class="summary-item">
+                        <div class="summary-label">Setup Investment</div>
+                        <div class="summary-value" id="setupInvestment">$0.00</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Monthly Savings</div>
+                        <div class="summary-value" id="monthlySavings">$0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="goToPhase(4)">← Previous</button>
+                <button class="btn btn-primary" onclick="goToPhase(6)">Next: Post-Implementation Review →</button>
+            </div>
+        </div>
+
+        <!-- PHASE 6: Post-Implementation Review -->
+        <div class="phase" id="phase6">
+            <h2>Phase 6: Post-Implementation Review</h2>
+            <p class="phase-description">After implementing your automation, reflect on what worked, what didn't, and what you'd improve next time. Track actual vs. projected savings.</p>
+
+            <div class="form-group">
+                <label for="consistencyCheck">Is the new workflow running consistently?</label>
+                <select id="consistencyCheck">
+                    <option value="">Select an option...</option>
+                    <option value="yes">Yes, running smoothly</option>
+                    <option value="partially">Partially, some issues</option>
+                    <option value="no">No, not yet</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="timeSavingsComparison">How do actual time savings compare to projections?</label>
+                <textarea id="timeSavingsComparison" placeholder="Describe the difference between estimated and actual time saved..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="unexpectedProblems">What unexpected problems came up?</label>
+                <textarea id="unexpectedProblems" placeholder="Document any issues that weren't anticipated..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="happyWith">Which automated step are you most happy with?</label>
+                <input type="text" id="happyWith" placeholder="Name the step...">
+            </div>
+
+            <div class="form-group">
+                <label for="needsAdjustment">Which needs the most adjustment?</label>
+                <input type="text" id="needsAdjustment" placeholder="Name the step...">
+            </div>
+
+            <div class="form-group">
+                <label for="returnToManual">Any steps you want to return to manual?</label>
+                <input type="text" id="returnToManual" placeholder="Name the steps, or leave blank if none...">
+            </div>
+
+            <div class="form-group">
+                <label for="nextProcess">Next process to map?</label>
+                <input type="text" id="nextProcess" placeholder="What process would you tackle next?">
+            </div>
+
+            <h3>Impact Summary</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Before</th>
+                        <th>After</th>
+                        <th>Improvement</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Time per Occurrence</td>
+                        <td id="beforeTimePerOcc">—</td>
+                        <td id="afterTimePerOcc">—</td>
+                        <td id="improvementTime">—</td>
+                    </tr>
+                    <tr>
+                        <td>Total Hours/Month</td>
+                        <td id="beforeHoursMonth">—</td>
+                        <td id="afterHoursMonth">—</td>
+                        <td id="improvementHours">—</td>
+                    </tr>
+                    <tr>
+                        <td>Monthly Process Cost</td>
+                        <td id="beforeCost">—</td>
+                        <td id="afterCost">—</td>
+                        <td id="improvementCost">—</td>
+                    </tr>
+                    <tr>
+                        <td>Manual Steps</td>
+                        <td id="beforeManualSteps">—</td>
+                        <td id="afterManualSteps">—</td>
+                        <td id="improvementSteps">—</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="goToPhase(5)">← Previous</button>
+                <button class="btn btn-primary" onclick="downloadData()">⬇️ Download Results</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data structure
+        const data = {
+            phase1: {
+                processName: '',
+                trigger: '',
+                endResult: '',
+                frequency: 'daily',
+                whoInvolved: '',
+                timePerOccurrence: 0,
+                frequencyPerMonth: 0,
+                hourlyRate: 0,
+                errorCost: 0
+            },
+            phase2: {
+                steps: []
+            },
+            phase3: {
+                aiScores: {}
+            },
+            phase4: {
+                newWorkflow: {}
+            },
+            phase5: {
+                implementations: []
+            },
+            phase6: {
+                review: {}
+            }
+        };
+
+        const phases = ['phase1', 'phase2', 'phase3', 'phase4', 'phase5', 'phase6'];
+        const phaseNames = [
+            'Define the Process',
+            'Map Current Workflow',
+            'Identify AI Opportunities',
+            'Design New Workflow',
+            'Implementation Plan',
+            'Post-Implementation Review'
+        ];
+
+        let currentPhase = 0;
+
+        // Initialize progress bar
+        function initializeProgressBar() {
+            const progressBar = document.getElementById('progressBar');
+            progressBar.innerHTML = '';
+            phases.forEach((phase, index) => {
+                const step = document.createElement('div');
+                step.className = 'progress-step';
+                if (index === currentPhase) step.classList.add('active');
+                step.textContent = phaseNames[index];
+                step.onclick = () => goToPhase(index + 1);
+                progressBar.appendChild(step);
+            });
+            updateProgressBar();
+        }
+
+        function updateProgressBar() {
+            const steps = document.querySelectorAll('.progress-step');
+            steps.forEach((step, index) => {
+                step.classList.remove('active', 'complete');
+                if (index === currentPhase) {
+                    step.classList.add('active');
+                } else if (index < currentPhase) {
+                    step.classList.add('complete');
+                }
+            });
+        }
+
+        function goToPhase(phaseNum) {
+            savePhaseData(currentPhase);
+            currentPhase = phaseNum - 1;
+            loadPhaseData(currentPhase);
+
+            document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+            document.getElementById(phases[currentPhase]).classList.add('active');
+
+            updateProgressBar();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Phase 1: Cost Calculator
+        function setupPhase1Listeners() {
+            const inputs = ['timePerOccurrence', 'frequencyPerMonth', 'hourlyRate', 'errorCost'];
+            inputs.forEach(id => {
+                document.getElementById(id).addEventListener('input', calculateCosts);
+            });
+        }
+
+        function calculateCosts() {
+            const timePerOcc = parseFloat(document.getElementById('timePerOccurrence').value) || 0;
+            const freqPerMonth = parseFloat(document.getElementById('frequencyPerMonth').value) || 0;
+            const hourlyRate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+            const errorCost = parseFloat(document.getElementById('errorCost').value) || 0;
+
+            const totalHours = (timePerOcc * freqPerMonth) / 60;
+            const processCost = totalHours * hourlyRate;
+            const totalCost = processCost + errorCost;
+
+            document.getElementById('totalHoursMonth').textContent = totalHours.toFixed(1);
+            document.getElementById('monthlyProcessCost').textContent = '$' + processCost.toFixed(2);
+            document.getElementById('totalMonthlyCost').textContent = '$' + totalCost.toFixed(2);
+        }
+
+        // Phase 2: Step Builder
+        function addStep() {
+            const step = {
+                id: Date.now(),
+                description: '',
+                who: '',
+                time: 0,
+                tools: '',
+                painPoints: ''
+            };
+            data.phase2.steps.push(step);
+            renderSteps();
+        }
+
+        function renderSteps() {
+            const container = document.getElementById('stepBuilder');
+
+            if (data.phase2.steps.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <p>No steps added yet. Click "Add Step" to begin mapping your workflow.</p>
+                    </div>
+                `;
+                updatePhase2Summary();
+                return;
+            }
+
+            container.innerHTML = data.phase2.steps.map((step, idx) => `
+                <div class="step-item">
+                    <div class="step-header">
+                        <div class="step-number">${idx + 1}</div>
+                        <input type="text" class="step-desc" placeholder="Step description" value="${step.description}" data-id="${step.id}" style="flex: 1; margin: 0; padding: 0.5rem; border: none; background: transparent; font-weight: 500;">
+                        <div class="step-move-buttons">
+                            <button class="btn btn-sm btn-secondary" onclick="moveStep(${step.id}, -1)" ${idx === 0 ? 'disabled' : ''}>↑</button>
+                            <button class="btn btn-sm btn-secondary" onclick="moveStep(${step.id}, 1)" ${idx === data.phase2.steps.length - 1 ? 'disabled' : ''}>↓</button>
+                        </div>
+                    </div>
+                    <div class="step-content">
+                        <div class="form-group">
+                            <label>Who Does It</label>
+                            <input type="text" class="step-who" placeholder="e.g., Sales rep" value="${step.who}" data-id="${step.id}">
+                        </div>
+                        <div class="form-group">
+                            <label>Time (minutes)</label>
+                            <input type="number" class="step-time" placeholder="0" value="${step.time}" data-id="${step.id}" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Tools Used</label>
+                            <input type="text" class="step-tools" placeholder="e.g., Excel, HubSpot" value="${step.tools}" data-id="${step.id}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Pain Points</label>
+                        <textarea class="step-pain" data-id="${step.id}" placeholder="What's difficult about this step?">${step.painPoints}</textarea>
+                    </div>
+                    <button class="btn btn-sm btn-danger" onclick="deleteStep(${step.id})">Delete Step</button>
+                </div>
+            `).join('');
+
+            // Attach event listeners
+            document.querySelectorAll('.step-desc').forEach(el => {
+                el.addEventListener('input', (e) => {
+                    const step = data.phase2.steps.find(s => s.id == e.target.dataset.id);
+                    if (step) step.description = e.target.value;
+                });
+            });
+
+            document.querySelectorAll('.step-who').forEach(el => {
+                el.addEventListener('input', (e) => {
+                    const step = data.phase2.steps.find(s => s.id == e.target.dataset.id);
+                    if (step) step.who = e.target.value;
+                });
+            });
+
+            document.querySelectorAll('.step-time').forEach(el => {
+                el.addEventListener('input', (e) => {
+                    const step = data.phase2.steps.find(s => s.id == e.target.dataset.id);
+                    if (step) step.time = parseInt(e.target.value) || 0;
+                    updatePhase2Summary();
+                });
+            });
+
+            document.querySelectorAll('.step-tools').forEach(el => {
+                el.addEventListener('input', (e) => {
+                    const step = data.phase2.steps.find(s => s.id == e.target.dataset.id);
+                    if (step) step.tools = e.target.value;
+                });
+            });
+
+            document.querySelectorAll('.step-pain').forEach(el => {
+                el.addEventListener('input', (e) => {
+                    const step = data.phase2.steps.find(s => s.id == e.target.dataset.id);
+                    if (step) step.painPoints = e.target.value;
+                    updatePhase2Summary();
+                });
+            });
+
+            updatePhase2Summary();
+        }
+
+        function moveStep(id, direction) {
+            const idx = data.phase2.steps.findIndex(s => s.id === id);
+            if (idx === -1) return;
+
+            const newIdx = idx + direction;
+            if (newIdx < 0 || newIdx >= data.phase2.steps.length) return;
+
+            [data.phase2.steps[idx], data.phase2.steps[newIdx]] = [data.phase2.steps[newIdx], data.phase2.steps[idx]];
+            renderSteps();
+        }
+
+        function deleteStep(id) {
+            data.phase2.steps = data.phase2.steps.filter(s => s.id !== id);
+            delete data.phase3.aiScores[id];
+            renderSteps();
+            if (currentPhase >= 2) renderPhase3();
+            if (currentPhase >= 3) renderPhase4();
+        }
+
+        function updatePhase2Summary() {
+            const totalSteps = data.phase2.steps.length;
+            const totalTime = data.phase2.steps.reduce((sum, s) => sum + s.time, 0);
+
+            document.getElementById('totalSteps').textContent = totalSteps;
+            document.getElementById('totalTime').textContent = totalTime + ' min';
+
+            const bottlenecks = data.phase2.steps.filter(s => s.painPoints).map(s => s.description || '(unnamed)');
+            document.getElementById('bottlenecks').innerHTML = bottlenecks.length > 0
+                ? bottlenecks.map(b => `<div>• ${b}</div>`).join('')
+                : '<div style="color: #999; font-style: italic;">No pain points identified yet</div>';
+        }
+
+        // Phase 3: AI Opportunities
+        function renderPhase3() {
+            const container = document.getElementById('aiOpportunitiesContainer');
+
+            if (data.phase2.steps.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🤖</div>
+                        <p>Add steps in Phase 2 first. Then come back here to evaluate AI opportunities.</p>
+                    </div>
+                `;
+                document.getElementById('phase3Summary').style.display = 'none';
+                return;
+            }
+
+            container.innerHTML = data.phase2.steps.map((step, idx) => {
+                const score = data.phase3.aiScores[step.id] || { repetitive: false, structured: false, catchable: false, volume: false, solutionType: '', specificTool: '' };
+                const yesCount = [score.repetitive, score.structured, score.catchable, score.volume].filter(Boolean).length;
+                const isCandidate = yesCount >= 3;
+
+                return `
+                    <div class="ai-filter-group ${isCandidate ? 'ai-candidate' : ''}">
+                        <div class="ai-filter-header">
+                            <div class="ai-filter-title">${idx + 1}. ${step.description || '(unnamed)'}</div>
+                            <div class="ai-score ${yesCount >= 3 ? '' : yesCount >= 1 ? 'partial' : ''}">${yesCount}/4</div>
+                        </div>
+
+                        <div class="ai-filter-questions">
+                            <div class="ai-question">
+                                <label class="ai-question-label">Is this step repetitive?</label>
+                                <button class="toggle ${score.repetitive ? 'active' : ''}" onclick="toggleAIScore(${step.id}, 'repetitive')"></button>
+                            </div>
+                            <div class="ai-question">
+                                <label class="ai-question-label">Is the input structured? (data, forms, etc.)</label>
+                                <button class="toggle ${score.structured ? 'active' : ''}" onclick="toggleAIScore(${step.id}, 'structured')"></button>
+                            </div>
+                            <div class="ai-question">
+                                <label class="ai-question-label">Is the error cost low or catchable?</label>
+                                <button class="toggle ${score.catchable ? 'active' : ''}" onclick="toggleAIScore(${step.id}, 'catchable')"></button>
+                            </div>
+                            <div class="ai-question">
+                                <label class="ai-question-label">Is there volume? (happens frequently)</label>
+                                <button class="toggle ${score.volume ? 'active' : ''}" onclick="toggleAIScore(${step.id}, 'volume')"></button>
+                            </div>
+                        </div>
+
+                        ${isCandidate ? `
+                            <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #c5dfe5;">
+                                <div class="form-group">
+                                    <label>Solution Type</label>
+                                    <select onchange="updateAISolution(${step.id}, 'solutionType', this.value)">
+                                        <option value="">Select...</option>
+                                        <option value="Prompt" ${score.solutionType === 'Prompt' ? 'selected' : ''}>Prompt (ChatGPT, Claude)</option>
+                                        <option value="Tool" ${score.solutionType === 'Tool' ? 'selected' : ''}>Tool (Zapier, Make, native)</option>
+                                        <option value="Automation" ${score.solutionType === 'Automation' ? 'selected' : ''}>Automation (workflow builder)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Specific Tool or Approach</label>
+                                    <input type="text" value="${score.specificTool}" onchange="updateAISolution(${step.id}, 'specificTool', this.value)" placeholder="e.g., Claude API, Zapier + GPT, GHL automation">
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+
+            updatePhase3Summary();
+        }
+
+        function toggleAIScore(stepId, field) {
+            if (!data.phase3.aiScores[stepId]) {
+                data.phase3.aiScores[stepId] = { repetitive: false, structured: false, catchable: false, volume: false, solutionType: '', specificTool: '' };
+            }
+            data.phase3.aiScores[stepId][field] = !data.phase3.aiScores[stepId][field];
+            renderPhase3();
+        }
+
+        function updateAISolution(stepId, field, value) {
+            if (!data.phase3.aiScores[stepId]) {
+                data.phase3.aiScores[stepId] = { repetitive: false, structured: false, catchable: false, volume: false, solutionType: '', specificTool: '' };
+            }
+            data.phase3.aiScores[stepId][field] = value;
+        }
+
+        function updatePhase3Summary() {
+            const candidates = Object.entries(data.phase3.aiScores).filter(([, score]) => {
+                const yesCount = [score.repetitive, score.structured, score.catchable, score.volume].filter(Boolean).length;
+                return yesCount >= 3;
+            }).length;
+
+            const totalTime = data.phase2.steps.reduce((sum, s) => sum + s.time, 0);
+            const candidateTime = data.phase2.steps
+                .filter(s => {
+                    const score = data.phase3.aiScores[s.id];
+                    if (!score) return false;
+                    const yesCount = [score.repetitive, score.structured, score.catchable, score.volume].filter(Boolean).length;
+                    return yesCount >= 3;
+                })
+                .reduce((sum, s) => sum + s.time, 0);
+
+            const freq = parseFloat(document.getElementById('frequencyPerMonth').value) || 0;
+            const hoursPerMonth = (candidateTime * freq) / 60;
+
+            document.getElementById('aiCandidateCount').textContent = candidates + ' / ' + data.phase2.steps.length;
+            document.getElementById('potentialTimeSaved').textContent = hoursPerMonth.toFixed(1) + ' hrs/mo';
+
+            if (data.phase2.steps.length > 0) {
+                document.getElementById('phase3Summary').style.display = 'block';
+            }
+        }
+
+        // Phase 4: Design New Workflow
+        function renderPhase4() {
+            const container = document.getElementById('newWorkflowContainer');
+
+            if (data.phase2.steps.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔄</div>
+                        <p>Add steps in Phase 2 and identify AI opportunities in Phase 3 first.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = data.phase2.steps.map((step, idx) => {
+                const score = data.phase3.aiScores[step.id];
+                const yesCount = score ? [score.repetitive, score.structured, score.catchable, score.volume].filter(Boolean).length : 0;
+                const isCandidate = yesCount >= 3;
+
+                let newWorkflowData = data.phase4.newWorkflow[step.id] || { trigger: '', needsReview: false };
+
+                return `
+                    <div class="step-item ${isCandidate ? 'ai-candidate' : 'manual-step'}">
+                        <div class="step-header">
+                            <div class="step-number">${idx + 1}</div>
+                            <strong style="flex: 1;">${step.description || '(unnamed)'}</strong>
+                            <span class="step-badge ${isCandidate ? 'badge-ai' : 'badge-manual'}">${isCandidate ? '🤖 AI' : '👤 Manual'}</span>
+                        </div>
+
+                        ${isCandidate ? `
+                            <div style="margin-top: 1rem; padding: 1rem; background: rgba(42, 97, 113, 0.05); border-radius: 4px;">
+                                <strong style="color: #2a6171;">Solution:</strong> ${score.solutionType}
+                                ${score.specificTool ? ` • ${score.specificTool}` : ''}
+                            </div>
+                        ` : ''}
+
+                        <div class="step-content" style="margin-top: 1rem;">
+                            <div class="form-group">
+                                <label>Trigger for This Step</label>
+                                <input type="text" value="${newWorkflowData.trigger}" onchange="updateNewWorkflow(${step.id}, 'trigger', this.value)" placeholder="What kicks off this step?">
+                            </div>
+                            <div class="form-group">
+                                <label>Human Review Needed?</label>
+                                <div class="toggle-group">
+                                    <button class="toggle ${newWorkflowData.needsReview ? 'active' : ''}" onclick="updateNewWorkflow(${step.id}, 'needsReview', !${newWorkflowData.needsReview ? 'true' : 'false'})"></button>
+                                    <span style="line-height: 28px; margin-left: 0.5rem;">${newWorkflowData.needsReview ? 'Yes' : 'No'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateNewWorkflow(stepId, field, value) {
+            if (!data.phase4.newWorkflow[stepId]) {
+                data.phase4.newWorkflow[stepId] = { trigger: '', needsReview: false };
+            }
+            data.phase4.newWorkflow[stepId][field] = value;
+            renderPhase4();
+        }
+
+        // Phase 5: Implementation Plan
+        function renderPhase5() {
+            const container = document.getElementById('implementationContainer');
+
+            const aiSteps = data.phase2.steps.filter(step => {
+                const score = data.phase3.aiScores[step.id];
+                if (!score) return false;
+                const yesCount = [score.repetitive, score.structured, score.catchable, score.volume].filter(Boolean).length;
+                return yesCount >= 3;
+            });
+
+            if (aiSteps.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🎯</div>
+                        <p>Identify AI candidates in Phase 3 first to create your implementation plan.</p>
+                    </div>
+                `;
+                document.getElementById('roiBoxPhase5').style.display = 'none';
+                document.getElementById('phase5Summary').style.display = 'none';
+                return;
+            }
+
+            container.innerHTML = aiSteps.map((step, idx) => {
+                const impl = data.phase5.implementations.find(i => i.stepId === step.id) || {
+                    stepId: step.id,
+                    priority: idx + 1,
+                    setupTime: 0,
+                    targetDate: ''
+                };
+
+                const hourlyRate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+                const freqPerMonth = parseFloat(document.getElementById('frequencyPerMonth').value) || 0;
+                const timeSaved = (step.time * freqPerMonth) / 60;
+                const monthlySavings = timeSaved * hourlyRate;
+
+                return `
+                    <div class="step-item ai-candidate">
+                        <div class="step-header">
+                            <div class="step-number">${idx + 1}</div>
+                            <strong style="flex: 1;">${step.description || '(unnamed)'}</strong>
+                        </div>
+
+                        <div class="step-content" style="margin-top: 1rem;">
+                            <div class="form-group">
+                                <label>Priority Rank</label>
+                                <input type="number" value="${impl.priority}" onchange="updateImplementation(${step.id}, 'priority', this.value)" min="1" max="${aiSteps.length}">
+                            </div>
+                            <div class="form-group">
+                                <label>Setup Time (hours)</label>
+                                <input type="number" value="${impl.setupTime}" onchange="updateImplementation(${step.id}, 'setupTime', this.value)" min="0" step="0.5">
+                            </div>
+                            <div class="form-group">
+                                <label>Target Date</label>
+                                <input type="date" value="${impl.targetDate}" onchange="updateImplementation(${step.id}, 'targetDate', this.value)">
+                            </div>
+                        </div>
+
+                        <div class="summary-box" style="margin-top: 1rem; background: #fef3e8; border-left-color: #e8873a;">
+                            <div class="summary-row">
+                                <div class="summary-item">
+                                    <div class="summary-label">Time Saved/Month</div>
+                                    <div class="summary-value">${timeSaved.toFixed(1)} hrs</div>
+                                </div>
+                                <div class="summary-item">
+                                    <div class="summary-label">Monthly Savings</div>
+                                    <div class="summary-value">$${monthlySavings.toFixed(2)}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            updatePhase5Summary();
+        }
+
+        function updateImplementation(stepId, field, value) {
+            let impl = data.phase5.implementations.find(i => i.stepId === stepId);
+            if (!impl) {
+                impl = { stepId, priority: 1, setupTime: 0, targetDate: '' };
+                data.phase5.implementations.push(impl);
+            }
+            impl[field] = field === 'priority' ? parseInt(value) : field === 'setupTime' ? parseFloat(value) : value;
+            renderPhase5();
+        }
+
+        function updatePhase5Summary() {
+            const hourlyRate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+            const freqPerMonth = parseFloat(document.getElementById('frequencyPerMonth').value) || 0;
+
+            const totalSetupHours = data.phase5.implementations.reduce((sum, impl) => sum + (parseFloat(impl.setupTime) || 0), 0);
+            const setupCost = totalSetupHours * hourlyRate;
+
+            const monthlySavings = data.phase2.steps
+                .filter(step => {
+                    const score = data.phase3.aiScores[step.id];
+                    if (!score) return false;
+                    const yesCount = [score.repetitive, score.structured, score.catchable, score.volume].filter(Boolean).length;
+                    return yesCount >= 3;
+                })
+                .reduce((sum, step) => {
+                    const timeSaved = (step.time * freqPerMonth) / 60;
+                    return sum + (timeSaved * hourlyRate);
+                }, 0);
+
+            const paybackMonths = monthlySavings > 0 ? (setupCost / monthlySavings) : 999;
+
+            document.getElementById('setupInvestment').textContent = '$' + setupCost.toFixed(2);
+            document.getElementById('monthlySavings').textContent = '$' + monthlySavings.toFixed(2);
+
+            const roiBox = document.getElementById('roiBoxPhase5');
+            const paybackEl = document.getElementById('paybackPeriod');
+            const interpretEl = document.getElementById('roiInterpretation');
+
+            if (setupCost > 0 && monthlySavings > 0) {
+                roiBox.style.display = 'block';
+                document.getElementById('phase5Summary').style.display = 'block';
+
+                if (paybackMonths < 1) {
+                    paybackEl.textContent = paybackMonths.toFixed(1) + ' weeks';
+                    interpretEl.className = 'roi-interpretation strong';
+                    interpretEl.textContent = '🚀 No-brainer! Pays for itself in less than a month.';
+                } else if (paybackMonths < 3) {
+                    paybackEl.textContent = paybackMonths.toFixed(1) + ' months';
+                    interpretEl.className = 'roi-interpretation strong';
+                    interpretEl.textContent = '✅ Strong ROI. Pays for itself in under 3 months.';
+                } else if (paybackMonths < 6) {
+                    paybackEl.textContent = paybackMonths.toFixed(1) + ' months';
+                    interpretEl.className = 'roi-interpretation moderate';
+                    interpretEl.textContent = '⚠️ Moderate. Payback in 3-6 months. Consider prioritizing.';
+                } else {
+                    paybackEl.textContent = paybackMonths.toFixed(1) + ' months';
+                    interpretEl.className = 'roi-interpretation weak';
+                    interpretEl.textContent = '🔄 Long payback period. Reconsider priority or scope.';
+                }
+            } else {
+                roiBox.style.display = 'none';
+                document.getElementById('phase5Summary').style.display = 'none';
+            }
+        }
+
+        // Phase 6: Post-Implementation Review
+        function renderPhase6() {
+            const originalTime = parseFloat(document.getElementById('timePerOccurrence').value) || 0;
+            const originalFreq = parseFloat(document.getElementById('frequencyPerMonth').value) || 0;
+            const hourlyRate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+
+            const originalHours = (originalTime * originalFreq) / 60;
+            const originalCost = originalHours * hourlyRate + (parseFloat(document.getElementById('errorCost').value) || 0);
+
+            const aiSteps = data.phase2.steps.filter(step => {
+                const score = data.phase3.aiScores[step.id];
+                if (!score) return false;
+                const yesCount = [score.repetitive, score.structured, score.catchable, score.volume].filter(Boolean).length;
+                return yesCount >= 3;
+            });
+
+            const timeSavedMinutes = aiSteps.reduce((sum, s) => sum + s.time, 0);
+            const timeSavedHours = (timeSavedMinutes * originalFreq) / 60;
+            const newTime = Math.max(0, originalTime - timeSavedMinutes);
+            const newHours = (newTime * originalFreq) / 60;
+            const newCost = newHours * hourlyRate;
+
+            const manualSteps = data.phase2.steps.filter(step => {
+                const score = data.phase3.aiScores[step.id];
+                if (!score) return true;
+                const yesCount = [score.repetitive, score.structured, score.catchable, score.volume].filter(Boolean).length;
+                return yesCount < 3;
+            }).length;
+
+            const autoSteps = data.phase2.steps.length - manualSteps;
+
+            document.getElementById('beforeTimePerOcc').textContent = originalTime + ' min';
+            document.getElementById('afterTimePerOcc').textContent = newTime + ' min';
+            document.getElementById('improvementTime').innerHTML = `<span class="highlight-green">-${(originalTime - newTime)} min</span>`;
+
+            document.getElementById('beforeHoursMonth').textContent = originalHours.toFixed(1) + ' hrs';
+            document.getElementById('afterHoursMonth').textContent = newHours.toFixed(1) + ' hrs';
+            document.getElementById('improvementHours').innerHTML = `<span class="highlight-green">-${(originalHours - newHours).toFixed(1)} hrs</span>`;
+
+            document.getElementById('beforeCost').textContent = '$' + originalCost.toFixed(2);
+            document.getElementById('afterCost').textContent = '$' + newCost.toFixed(2);
+            document.getElementById('improvementCost').innerHTML = `<span class="highlight-green">-$${(originalCost - newCost).toFixed(2)}</span>`;
+
+            document.getElementById('beforeManualSteps').textContent = data.phase2.steps.length;
+            document.getElementById('afterManualSteps').textContent = manualSteps;
+            document.getElementById('improvementSteps').innerHTML = `<span class="highlight-orange">${autoSteps} automated</span>`;
+        }
+
+        // Save and Load Data
+        function savePhaseData(phaseIdx) {
+            if (phaseIdx === 0) {
+                data.phase1.processName = document.getElementById('processName').value;
+                data.phase1.trigger = document.getElementById('trigger').value;
+                data.phase1.endResult = document.getElementById('endResult').value;
+                data.phase1.frequency = document.getElementById('processFrequency').value;
+                data.phase1.whoInvolved = document.getElementById('whoInvolved').value;
+                data.phase1.timePerOccurrence = parseFloat(document.getElementById('timePerOccurrence').value) || 0;
+                data.phase1.frequencyPerMonth = parseFloat(document.getElementById('frequencyPerMonth').value) || 0;
+                data.phase1.hourlyRate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+                data.phase1.errorCost = parseFloat(document.getElementById('errorCost').value) || 0;
+            } else if (phaseIdx === 5) {
+                data.phase6.review = {
+                    consistency: document.getElementById('consistencyCheck').value,
+                    timeSavings: document.getElementById('timeSavingsComparison').value,
+                    problems: document.getElementById('unexpectedProblems').value,
+                    happyWith: document.getElementById('happyWith').value,
+                    needsAdjustment: document.getElementById('needsAdjustment').value,
+                    returnToManual: document.getElementById('returnToManual').value,
+                    nextProcess: document.getElementById('nextProcess').value
+                };
+            }
+        }
+
+        function loadPhaseData(phaseIdx) {
+            if (phaseIdx === 0) {
+                document.getElementById('processName').value = data.phase1.processName;
+                document.getElementById('trigger').value = data.phase1.trigger;
+                document.getElementById('endResult').value = data.phase1.endResult;
+                document.getElementById('processFrequency').value = data.phase1.frequency;
+                document.getElementById('whoInvolved').value = data.phase1.whoInvolved;
+                document.getElementById('timePerOccurrence').value = data.phase1.timePerOccurrence;
+                document.getElementById('frequencyPerMonth').value = data.phase1.frequencyPerMonth;
+                document.getElementById('hourlyRate').value = data.phase1.hourlyRate;
+                document.getElementById('errorCost').value = data.phase1.errorCost;
+                calculateCosts();
+            } else if (phaseIdx === 1) {
+                renderSteps();
+            } else if (phaseIdx === 2) {
+                renderPhase3();
+            } else if (phaseIdx === 3) {
+                renderPhase4();
+            } else if (phaseIdx === 4) {
+                renderPhase5();
+            } else if (phaseIdx === 5) {
+                renderPhase6();
+                document.getElementById('consistencyCheck').value = data.phase6.review.consistency || '';
+                document.getElementById('timeSavingsComparison').value = data.phase6.review.timeSavings || '';
+                document.getElementById('unexpectedProblems').value = data.phase6.review.problems || '';
+                document.getElementById('happyWith').value = data.phase6.review.happyWith || '';
+                document.getElementById('needsAdjustment').value = data.phase6.review.needsAdjustment || '';
+                document.getElementById('returnToManual').value = data.phase6.review.returnToManual || '';
+                document.getElementById('nextProcess').value = data.phase6.review.nextProcess || '';
+            }
+        }
+
+        // Download Results
+        function downloadData() {
+            savePhaseData(5);
+
+            const results = {
+                timestamp: new Date().toLocaleString(),
+                processName: data.phase1.processName || 'Untitled Process',
+                phase1: {
+                    trigger: data.phase1.trigger,
+                    endResult: data.phase1.endResult,
+                    frequency: data.phase1.frequency,
+                    whoInvolved: data.phase1.whoInvolved,
+                    originalCost: {
+                        hoursPerMonth: ((data.phase1.timePerOccurrence / 60) * data.phase1.frequencyPerMonth).toFixed(1),
+                        monthlyCost: '$' + ((data.phase1.timePerOccurrence / 60) * data.phase1.frequencyPerMonth * data.phase1.hourlyRate).toFixed(2),
+                        totalWithErrors: '$' + (((data.phase1.timePerOccurrence / 60) * data.phase1.frequencyPerMonth * data.phase1.hourlyRate) + data.phase1.errorCost).toFixed(2)
+                    }
+                },
+                phase2: {
+                    totalSteps: data.phase2.steps.length,
+                    steps: data.phase2.steps.map((s, i) => ({
+                        number: i + 1,
+                        description: s.description,
+                        who: s.who,
+                        timeMinutes: s.time,
+                        tools: s.tools,
+                        painPoints: s.painPoints
+                    }))
+                },
+                phase3: {
+                    aiCandidates: data.phase2.steps.filter(step => {
+                        const score = data.phase3.aiScores[step.id];
+                        if (!score) return false;
+                        const yesCount = [score.repetitive, score.structured, score.catchable, score.volume].filter(Boolean).length;
+                        return yesCount >= 3;
+                    }).map(step => ({
+                        description: step.description,
+                        solutionType: data.phase3.aiScores[step.id].solutionType,
+                        specificTool: data.phase3.aiScores[step.id].specificTool
+                    }))
+                },
+                phase5: {
+                    implementations: data.phase5.implementations
+                },
+                phase6: {
+                    review: data.phase6.review
+                }
+            };
+
+            const json = JSON.stringify(results, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `workflow-mapping-${data.phase1.processName.replace(/\s+/g, '-').toLowerCase() || 'untitled'}-${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeProgressBar();
+            setupPhase1Listeners();
+            loadPhaseData(0);
+        });
+    </script>
+</body>
+</html>

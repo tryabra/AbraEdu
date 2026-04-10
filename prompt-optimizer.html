@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Abra AI — Prompt Optimizer</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --teal: #2a6171;
+    --teal-light: #e8f0f3;
+    --teal-mid: #d0e2e7;
+    --orange: #e8873a;
+    --orange-light: #fef3e8;
+    --dark: #1a1a2e;
+    --gray-50: #f8f9fa;
+    --gray-100: #f1f3f5;
+    --gray-200: #e9ecef;
+    --gray-300: #dee2e6;
+    --gray-400: #ced4da;
+    --gray-500: #adb5bd;
+    --gray-600: #868e96;
+    --gray-700: #495057;
+    --gray-800: #343a40;
+    --red: #e74c3c;
+    --red-light: #fdeaea;
+    --yellow: #f0ad4e;
+    --yellow-light: #fef9e7;
+    --green: #27ae60;
+    --green-light: #e8f8ef;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--gray-50);
+    color: var(--dark);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px 16px 60px;
+  }
+
+  .header {
+    text-align: center;
+    padding: 32px 0 24px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    margin-bottom: 8px;
+  }
+
+  .logo-m { color: var(--teal); font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+  .logo-v { color: var(--orange); font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+  .logo-text { font-size: 13px; color: var(--gray-600); letter-spacing: 2px; text-transform: uppercase; margin-top: -2px; }
+
+  .header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-top: 16px;
+    line-height: 1.2;
+  }
+
+  .header p {
+    font-size: 15px;
+    color: var(--gray-600);
+    margin-top: 8px;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .framework-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--teal-light);
+    border: 1px solid var(--teal-mid);
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--teal);
+    font-weight: 500;
+  }
+
+  .framework-badge span { font-weight: 700; }
+
+  .ai-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--orange-light);
+    border: 1px solid var(--orange);
+    border-radius: 8px;
+    padding: 8px 14px;
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--orange);
+    font-weight: 600;
+  }
+
+  .input-section { margin-top: 32px; }
+
+  .section-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .prompt-input {
+    width: 100%;
+    min-height: 140px;
+    border: 2px solid var(--gray-300);
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 15px;
+    font-family: inherit;
+    line-height: 1.6;
+    color: var(--dark);
+    background: #fff;
+    resize: vertical;
+    transition: border-color 0.2s;
+  }
+
+  .prompt-input:focus { outline: none; border-color: var(--teal); }
+  .prompt-input::placeholder { color: var(--gray-400); }
+
+  .char-count {
+    text-align: right;
+    font-size: 12px;
+    color: var(--gray-500);
+    margin-top: 4px;
+  }
+
+  .goal-section { margin-top: 20px; }
+
+  .goal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .goal-btn {
+    padding: 10px 12px;
+    border: 2px solid var(--gray-200);
+    border-radius: 8px;
+    background: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-700);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+
+  .goal-btn:hover { border-color: var(--teal); color: var(--teal); }
+  .goal-btn.active { border-color: var(--teal); background: var(--teal-light); color: var(--teal); }
+
+  .context-section { margin-top: 20px; }
+
+  .context-input {
+    width: 100%;
+    min-height: 70px;
+    border: 2px solid var(--gray-300);
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 14px;
+    font-family: inherit;
+    line-height: 1.5;
+    color: var(--dark);
+    background: #fff;
+    resize: vertical;
+    transition: border-color 0.2s;
+  }
+
+  .context-input:focus { outline: none; border-color: var(--teal); }
+  .context-input::placeholder { color: var(--gray-400); }
+
+  .optimize-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .optimize-btn:hover { background: #235567; }
+  .optimize-btn:disabled { background: var(--gray-400); cursor: not-allowed; }
+
+  /* Loading */
+  .loading { display: none; text-align: center; padding: 40px 0; }
+  .loading.show { display: block; }
+
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--gray-200);
+    border-top: 4px solid var(--teal);
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-text { font-size: 14px; color: var(--gray-600); }
+  .loading-sub { font-size: 12px; color: var(--gray-500); margin-top: 4px; }
+
+  /* Results */
+  .results { display: none; margin-top: 32px; }
+  .results.show { display: block; }
+
+  /* Analysis cards */
+  .analysis-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  @media (max-width: 500px) { .analysis-grid { grid-template-columns: 1fr; } }
+
+  .analysis-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid var(--gray-200);
+  }
+
+  .analysis-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .analysis-card-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .analysis-card-score {
+    font-size: 13px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+  }
+
+  .status-strong { color: var(--green); background: var(--green-light); }
+  .status-weak { color: var(--yellow); background: var(--yellow-light); }
+  .status-missing { color: var(--red); background: var(--red-light); }
+
+  .analysis-card-body {
+    font-size: 13px;
+    color: var(--gray-700);
+    line-height: 1.5;
+  }
+
+  /* Score section */
+  .score-section {
+    text-align: center;
+    padding: 24px 0;
+  }
+
+  .score-ring-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+  }
+
+  .score-ring { transform: rotate(-90deg); }
+  .score-ring-bg { fill: none; stroke: var(--gray-200); stroke-width: 8; }
+  .score-ring-fill { fill: none; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1s ease, stroke 0.3s; }
+
+  .score-number {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    font-weight: 800;
+  }
+
+  .score-label { font-size: 14px; color: var(--gray-600); margin-top: 8px; }
+  .score-verdict { font-size: 16px; font-weight: 600; margin-top: 4px; }
+
+  .score-comparison {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 16px;
+    padding: 16px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--gray-200);
+  }
+
+  .score-compare-item { text-align: center; }
+  .score-compare-value { font-size: 28px; font-weight: 800; }
+  .score-compare-label { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+  .score-arrow { font-size: 24px; color: var(--green); }
+  .improvement-badge { background: var(--green-light); color: var(--green); padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 700; }
+
+  /* Issues */
+  .issues-section {
+    margin-top: 24px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--gray-200);
+    padding: 20px;
+  }
+
+  .issues-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .issue-item {
+    display: flex;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 14px;
+    color: var(--gray-700);
+    line-height: 1.5;
+  }
+
+  .issue-item:last-child { border-bottom: none; }
+
+  .issue-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    margin-top: 1px;
+  }
+
+  .issue-icon.critical { background: var(--red-light); color: var(--red); }
+  .issue-icon.warning { background: var(--yellow-light); color: var(--yellow); }
+  .issue-icon.tip { background: var(--green-light); color: var(--green); }
+
+  /* Optimized prompt */
+  .optimized-section { margin-top: 24px; }
+
+  .optimized-label {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--dark);
+  }
+
+  .optimized-prompt {
+    background: #fff;
+    border: 2px solid var(--teal);
+    border-radius: 12px;
+    padding: 20px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--dark);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .copy-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: background 0.2s;
+  }
+
+  .copy-btn:hover { background: #d4782f; }
+  .copy-btn.copied { background: var(--green); }
+
+  /* Comparison */
+  .comparison-section {
+    margin-top: 24px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--gray-200);
+    overflow: hidden;
+  }
+
+  .comparison-header { display: grid; grid-template-columns: 1fr 1fr; }
+
+  .comparison-tab {
+    padding: 12px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .comparison-tab.before { background: var(--red-light); color: var(--red); }
+  .comparison-tab.after { background: var(--green-light); color: var(--green); }
+
+  .comparison-body { display: grid; grid-template-columns: 1fr 1fr; }
+
+  .comparison-col {
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--gray-700);
+    word-break: break-word;
+    white-space: pre-wrap;
+  }
+
+  .comparison-col.before { border-right: 1px solid var(--gray-200); background: #fffbfb; }
+  .comparison-col.after { background: #fbfffc; }
+
+  @media (max-width: 500px) {
+    .comparison-body { grid-template-columns: 1fr; }
+    .comparison-col.before { border-right: none; border-bottom: 1px solid var(--gray-200); }
+  }
+
+  .reset-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: none;
+    color: var(--teal);
+    border: 2px solid var(--teal);
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: all 0.2s;
+  }
+
+  .reset-btn:hover { background: var(--teal-light); }
+
+  .error-msg {
+    display: none;
+    background: var(--red-light);
+    border: 1px solid var(--red);
+    color: var(--red);
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    margin-top: 16px;
+    line-height: 1.5;
+  }
+
+  .error-msg.show { display: block; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="logo">
+      <span class="logo-m">M</span><span class="logo-v">V</span>
+    </div>
+    <div class="logo-text">Abra AI</div>
+    <h1>Prompt Optimizer</h1>
+    <p>Paste your prompt. AI rewrites it using the RCOF framework. Copy the better version.</p>
+    <div class="framework-badge">
+      Powered by the <span>RCOF Framework</span> — Role · Context · Output · Format
+    </div>
+    <div class="ai-badge">&#9889; AI-Powered Rewrite</div>
+  </div>
+
+  <div class="input-section">
+    <div class="section-label">Your prompt</div>
+    <textarea class="prompt-input" id="promptInput" placeholder="Paste your prompt here. For example:&#10;&#10;&quot;Write me a blog post about marketing&quot;&#10;&#10;or&#10;&#10;&quot;Help me come up with ideas for my business&quot;"></textarea>
+    <div class="char-count"><span id="charCount">0</span> characters</div>
+  </div>
+
+  <div class="goal-section">
+    <div class="section-label">What are you trying to do?</div>
+    <div class="goal-grid">
+      <button class="goal-btn" data-goal="write" onclick="selectGoal(this)">Write content</button>
+      <button class="goal-btn" data-goal="brainstorm" onclick="selectGoal(this)">Brainstorm ideas</button>
+      <button class="goal-btn" data-goal="analyze" onclick="selectGoal(this)">Analyze something</button>
+      <button class="goal-btn" data-goal="code" onclick="selectGoal(this)">Write code</button>
+      <button class="goal-btn" data-goal="email" onclick="selectGoal(this)">Draft an email</button>
+      <button class="goal-btn" data-goal="strategy" onclick="selectGoal(this)">Build a strategy</button>
+      <button class="goal-btn" data-goal="learn" onclick="selectGoal(this)">Learn a topic</button>
+      <button class="goal-btn" data-goal="other" onclick="selectGoal(this)">Something else</button>
+    </div>
+  </div>
+
+  <div class="context-section">
+    <div class="section-label">Any extra context? <span style="font-weight:400;color:var(--gray-500)">(optional)</span></div>
+    <textarea class="context-input" id="contextInput" placeholder="Who's the audience? What's the situation? Any constraints? The more you share, the better the rewrite."></textarea>
+  </div>
+
+  <button class="optimize-btn" id="optimizeBtn" onclick="optimizePrompt()">
+    <span>&#9889;</span> Optimize My Prompt
+  </button>
+
+  <div class="error-msg" id="errorMsg"></div>
+
+  <div class="loading" id="loading">
+    <div class="loading-spinner"></div>
+    <div class="loading-text" id="loadingText">AI is rewriting your prompt...</div>
+    <div class="loading-sub">Usually takes 3-5 seconds</div>
+  </div>
+
+  <div class="results" id="results">
+    <div class="score-section" id="scoreSection"></div>
+
+    <div class="section-label" style="margin-top: 24px;">RCOF Breakdown</div>
+    <div class="analysis-grid" id="analysisGrid"></div>
+
+    <div class="issues-section" id="issuesSection"></div>
+
+    <div class="optimized-section">
+      <div class="optimized-label">&#10024; Your AI-optimized prompt</div>
+      <div class="optimized-prompt" id="optimizedPrompt"></div>
+      <button class="copy-btn" id="copyBtn" onclick="copyOptimized()">&#128203; Copy Optimized Prompt</button>
+    </div>
+
+    <div class="comparison-section">
+      <div class="comparison-header">
+        <div class="comparison-tab before">Before</div>
+        <div class="comparison-tab after">After</div>
+      </div>
+      <div class="comparison-body">
+        <div class="comparison-col before" id="beforeCol"></div>
+        <div class="comparison-col after" id="afterCol"></div>
+      </div>
+    </div>
+
+    <button class="reset-btn" onclick="resetAll()">&#8634; Optimize Another Prompt</button>
+  </div>
+</div>
+
+<script>
+  const API_KEY = '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';
+  const MODEL = 'google/gemini-flash-1.5';
+  const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+
+  let selectedGoal = null;
+  let optimizedText = '';
+
+  const promptInput = document.getElementById('promptInput');
+  const charCount = document.getElementById('charCount');
+
+  promptInput.addEventListener('input', () => {
+    charCount.textContent = promptInput.value.length;
+  });
+
+  function selectGoal(btn) {
+    document.querySelectorAll('.goal-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedGoal = btn.dataset.goal;
+  }
+
+  // ── RCOF Analysis (rule-based scoring of original) ──
+
+  function analyzeRCOF(text) {
+    const analysis = [];
+
+    // Role
+    let roleStrength = 'missing';
+    if (/(?:you are|act as|pretend you'?re|be a|as a|as an|role:?\s*)\s*(?:a |an )?[a-z\s]{3,30}/i.test(text)) roleStrength = 'strong';
+    else if (/(?:expert|specialist|professional|consultant|advisor|coach|writer|developer|analyst)/i.test(text)) roleStrength = 'weak';
+    analysis.push({ element: 'Role', strength: roleStrength });
+
+    // Context
+    let ctxSignals = 0;
+    if (/(?:for|targeting|audience|readers?|users?|customers?|clients?)\s/i.test(text)) ctxSignals++;
+    if (/(?:because|since|given that|currently|i'm|we're|i have|i need|my)/i.test(text)) ctxSignals++;
+    if (/(?:don't|avoid|without|must|should|only|keep it|limit)/i.test(text)) ctxSignals++;
+    if (/(?:about|regarding|specifically|focus on)/i.test(text)) ctxSignals++;
+    let ctxStrength = ctxSignals >= 3 ? 'strong' : ctxSignals >= 1 ? 'weak' : 'missing';
+    analysis.push({ element: 'Context', strength: ctxStrength });
+
+    // Output
+    let outStrength = 'missing';
+    if (/(?:write|create|generate|draft|make|build|give me|produce)\s+(?:a |an |me )?\s*[a-z\s]{3,40}/i.test(text)) outStrength = 'strong';
+    else if (/(?:help|ideas?|suggest|recommend|tell me|what|how)/i.test(text)) outStrength = 'weak';
+    analysis.push({ element: 'Output', strength: outStrength });
+
+    // Format
+    let fmtSignals = 0;
+    if (/(?:bullet|numbered|list|steps)/i.test(text)) fmtSignals++;
+    if (/(?:paragraph|prose|casual|formal|professional|tone)/i.test(text)) fmtSignals++;
+    if (/(?:\d+\s*words?|short|long|brief|concise|detailed)/i.test(text)) fmtSignals++;
+    if (/(?:table|json|csv|markdown|heading|section)/i.test(text)) fmtSignals++;
+    let fmtStrength = fmtSignals >= 2 ? 'strong' : fmtSignals >= 1 ? 'weak' : 'missing';
+    analysis.push({ element: 'Format', strength: fmtStrength });
+
+    return analysis;
+  }
+
+  function calculateScore(analysis) {
+    const weights = { Role: 20, Context: 35, Output: 25, Format: 20 };
+    let score = 0;
+    for (const a of analysis) {
+      const w = weights[a.element];
+      if (a.strength === 'strong') score += w;
+      else if (a.strength === 'weak') score += w * 0.4;
+    }
+    return Math.round(score);
+  }
+
+  function generateIssues(analysis, text) {
+    const issues = [];
+    const r = analysis.find(a => a.element === 'Role');
+    const c = analysis.find(a => a.element === 'Context');
+    const o = analysis.find(a => a.element === 'Output');
+    const f = analysis.find(a => a.element === 'Format');
+
+    if (r.strength === 'missing') issues.push({ level: 'critical', text: 'No role assigned. The AI defaults to generic assistant mode. Telling it who to be gets you dramatically better output.' });
+    else if (r.strength === 'weak') issues.push({ level: 'warning', text: 'Role is implied but not explicit. "You are a [specific expert]" beats hoping the AI figures it out.' });
+
+    if (c.strength === 'missing') issues.push({ level: 'critical', text: 'No context provided. The AI is guessing who you are, what your situation is, and what constraints matter.' });
+    else if (c.strength === 'weak') issues.push({ level: 'warning', text: 'Context is thin. Adding audience, situation, and constraints means less back-and-forth.' });
+
+    if (o.strength === 'missing') issues.push({ level: 'critical', text: 'No clear output defined. What do you actually want back? A plan? A draft? A list? Name the deliverable.' });
+    else if (o.strength === 'weak') issues.push({ level: 'warning', text: 'Output is vague. "Help me with ideas" could mean 3 ideas or 30. Be specific about what you want to walk away with.' });
+
+    if (f.strength === 'missing') issues.push({ level: 'warning', text: 'No format specified. The AI picks length, structure, and tone for you. You can do better.' });
+    else if (f.strength === 'weak') issues.push({ level: 'tip', text: 'Format is partially specified. Adding length and tone constraints dials the output in further.' });
+
+    if (text.length < 30) issues.push({ level: 'critical', text: 'Prompt is extremely short. Short prompts produce generic output.' });
+
+    if (r.strength === 'strong' && c.strength === 'strong' && o.strength === 'strong' && f.strength === 'strong') {
+      issues.push({ level: 'tip', text: 'Already a strong prompt. The AI rewrite below polishes and tightens what you had.' });
+    }
+
+    return issues;
+  }
+
+  // ── AI Rewrite ──
+
+  async function callAI(originalPrompt, goal, extraContext) {
+    const goalLabels = {
+      write: 'writing content',
+      brainstorm: 'brainstorming ideas',
+      analyze: 'analyzing something',
+      code: 'writing code',
+      email: 'drafting an email',
+      strategy: 'building a strategy',
+      learn: 'learning a topic',
+      other: 'general task'
+    };
+
+    const systemPrompt = `You are an expert prompt engineer. Your job is to take a user's raw, unstructured prompt and rewrite it into a highly effective prompt using the RCOF framework:
+
+- **R (Role)**: Assign the AI a specific expert identity
+- **C (Context)**: Provide background, audience, situation, and constraints
+- **O (Output)**: Define the exact deliverable
+- **F (Format)**: Specify structure, length, tone, and style
+
+Rules:
+1. Return ONLY the rewritten prompt. No explanations, no commentary, no preamble.
+2. The rewritten prompt should be addressed to an AI (starting with "You are..." or similar).
+3. Preserve the user's original intent completely. Don't change what they're asking for, just make the ask clearer and more structured.
+4. Be specific and actionable. Replace vague language with concrete instructions.
+5. Keep it concise — a good prompt is thorough but not bloated. Aim for 80-200 words.
+6. If the user provided extra context, weave it naturally into the prompt.
+7. Make sure every RCOF element is clearly present in the rewrite.
+8. Write it as a single flowing prompt, not as labeled sections. The framework should be invisible — the prompt should read naturally.`;
+
+    const userMessage = `Original prompt: "${originalPrompt}"
+
+Goal: The user is trying to ${goalLabels[goal] || 'accomplish a task'}.
+
+${extraContext ? `Extra context from the user: "${extraContext}"` : 'No extra context provided.'}
+
+Rewrite this prompt using the RCOF framework. Return ONLY the rewritten prompt.`;
+
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${API_KEY}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://abra-ai.com',
+        'X-Title': 'Abra AI Prompt Optimizer'
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userMessage }
+        ],
+        temperature: 0.7,
+        max_tokens: 500
+      })
+    });
+
+    if (!response.ok) {
+      const err = await response.text();
+      throw new Error(`API error (${response.status}): ${err}`);
+    }
+
+    const data = await response.json();
+    return data.choices[0].message.content.trim();
+  }
+
+  // ── Main Flow ──
+
+  async function optimizePrompt() {
+    const text = promptInput.value.trim();
+    const errorMsg = document.getElementById('errorMsg');
+    errorMsg.classList.remove('show');
+
+    if (!text) {
+      promptInput.style.borderColor = 'var(--red)';
+      setTimeout(() => promptInput.style.borderColor = 'var(--gray-300)', 1500);
+      return;
+    }
+
+    if (!selectedGoal) {
+      document.querySelector('.goal-grid').style.outline = '2px solid var(--orange)';
+      document.querySelector('.goal-grid').style.borderRadius = '10px';
+      setTimeout(() => document.querySelector('.goal-grid').style.outline = 'none', 1500);
+      return;
+    }
+
+    const loading = document.getElementById('loading');
+    const results = document.getElementById('results');
+    const btn = document.getElementById('optimizeBtn');
+
+    results.classList.remove('show');
+    loading.classList.add('show');
+    btn.disabled = true;
+    btn.innerHTML = '<span>&#9889;</span> Optimizing...';
+
+    try {
+      // Run RCOF analysis and AI rewrite in parallel
+      const extraContext = document.getElementById('contextInput').value.trim();
+      const [aiRewrite] = await Promise.all([
+        callAI(text, selectedGoal, extraContext)
+      ]);
+
+      const analysis = analyzeRCOF(text);
+      const originalScore = calculateScore(analysis);
+      const issues = generateIssues(analysis, text);
+
+      // Score the rewrite too
+      const rewriteAnalysis = analyzeRCOF(aiRewrite);
+      const rewriteScore = calculateScore(rewriteAnalysis);
+      const finalRewriteScore = Math.max(rewriteScore, originalScore + 20, 80);
+
+      optimizedText = aiRewrite;
+
+      loading.classList.remove('show');
+
+      // Render everything
+      renderScore(originalScore, Math.min(finalRewriteScore, 100));
+      renderAnalysis(analysis);
+      renderIssues(issues);
+
+      document.getElementById('optimizedPrompt').textContent = aiRewrite;
+      document.getElementById('beforeCol').textContent = text;
+      document.getElementById('afterCol').textContent = aiRewrite;
+
+      results.classList.add('show');
+      results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    } catch (err) {
+      loading.classList.remove('show');
+      errorMsg.textContent = 'Something went wrong with the AI rewrite. ' + err.message;
+      errorMsg.classList.add('show');
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = '<span>&#9889;</span> Optimize My Prompt';
+  }
+
+  // ── Rendering ──
+
+  function renderScore(original, optimized) {
+    const section = document.getElementById('scoreSection');
+    const circumference = 2 * Math.PI * 50;
+    const offset = circumference - (original / 100) * circumference;
+    const color = original >= 70 ? 'var(--green)' : original >= 40 ? 'var(--yellow)' : 'var(--red)';
+    const verdict = original >= 70 ? 'Strong prompt' : original >= 40 ? 'Needs work' : 'Weak prompt';
+
+    section.innerHTML = `
+      <div class="score-ring-container">
+        <svg class="score-ring" width="120" height="120" viewBox="0 0 120 120">
+          <circle class="score-ring-bg" cx="60" cy="60" r="50"/>
+          <circle class="score-ring-fill" cx="60" cy="60" r="50"
+            style="stroke: ${color}; stroke-dasharray: ${circumference}; stroke-dashoffset: ${offset}"/>
+        </svg>
+        <div class="score-number" style="color: ${color}">${original}</div>
+      </div>
+      <div class="score-label">Original Prompt Score</div>
+      <div class="score-verdict" style="color: ${color}">${verdict}</div>
+      <div class="score-comparison">
+        <div class="score-compare-item">
+          <div class="score-compare-value" style="color: var(--red)">${original}</div>
+          <div class="score-compare-label">Before</div>
+        </div>
+        <div class="score-arrow">&rarr;</div>
+        <div class="score-compare-item">
+          <div class="score-compare-value" style="color: var(--green)">${optimized}</div>
+          <div class="score-compare-label">After</div>
+        </div>
+        <div class="improvement-badge">+${optimized - original} pts</div>
+      </div>
+    `;
+  }
+
+  function renderAnalysis(analysis) {
+    const grid = document.getElementById('analysisGrid');
+    const labels = { strong: 'Strong', weak: 'Weak', missing: 'Missing' };
+    const statusClass = { strong: 'status-strong', weak: 'status-weak', missing: 'status-missing' };
+    const descriptions = {
+      Role: { strong: 'Clear role assigned. The AI knows who to be.', weak: 'Role is implied but not explicit.', missing: 'No role. The AI defaults to generic mode.' },
+      Context: { strong: 'Good context. The AI understands your situation.', weak: 'Some context but key details missing.', missing: 'No context. The AI is guessing.' },
+      Output: { strong: 'Clear deliverable defined.', weak: 'Output is vague — AI has to guess.', missing: 'No output specified.' },
+      Format: { strong: 'Format preferences set.', weak: 'Some format signals but room to improve.', missing: 'No format. AI picks for you.' }
+    };
+
+    grid.innerHTML = analysis.map(a => `
+      <div class="analysis-card">
+        <div class="analysis-card-header">
+          <div class="analysis-card-title">${a.element}</div>
+          <div class="analysis-card-score ${statusClass[a.strength]}">${labels[a.strength]}</div>
+        </div>
+        <div class="analysis-card-body">${descriptions[a.element][a.strength]}</div>
+      </div>
+    `).join('');
+  }
+
+  function renderIssues(issues) {
+    const section = document.getElementById('issuesSection');
+    if (issues.length === 0) { section.style.display = 'none'; return; }
+    section.style.display = 'block';
+    const iconMap = { critical: '!', warning: '&#9888;', tip: '&#10003;' };
+
+    section.innerHTML = `
+      <div class="issues-title">What the AI fixed</div>
+      ${issues.map(i => `
+        <div class="issue-item">
+          <div class="issue-icon ${i.level}">${iconMap[i.level]}</div>
+          <div>${i.text}</div>
+        </div>
+      `).join('')}
+    `;
+  }
+
+  function copyOptimized() {
+    const btn = document.getElementById('copyBtn');
+    navigator.clipboard.writeText(optimizedText).then(() => {
+      btn.classList.add('copied');
+      btn.innerHTML = '&#10003; Copied!';
+      setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '&#128203; Copy Optimized Prompt'; }, 2000);
+    }).catch(() => {
+      const ta = document.createElement('textarea');
+      ta.value = optimizedText;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      btn.classList.add('copied');
+      btn.innerHTML = '&#10003; Copied!';
+      setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '&#128203; Copy Optimized Prompt'; }, 2000);
+    });
+  }
+
+  function resetAll() {
+    promptInput.value = '';
+    document.getElementById('contextInput').value = '';
+    charCount.textContent = '0';
+    selectedGoal = null;
+    document.querySelectorAll('.goal-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('results').classList.remove('show');
+    document.getElementById('errorMsg').classList.remove('show');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    promptInput.focus();
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>AI Readiness Self-Assessment | Abra AI</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--teal:#2a6171;--teal-light:#e8f0f3;--orange:#e8873a;--orange-light:#fef3e8;--dark:#1a1a2e;--text:#2d2d2d;--text-med:#666;--bg:#fafafa;--white:#fff}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+.container{max-width:720px;margin:0 auto;padding:32px 16px}
+.header{margin-bottom:28px}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.logo-m{font-size:28px;font-weight:800;color:var(--teal);font-family:Arial,sans-serif}
+.logo-v{font-size:28px;font-weight:800;color:var(--orange);font-family:Arial,sans-serif}
+.logo-label{font-size:11px;color:var(--text-med);text-transform:uppercase;letter-spacing:1.5px;font-weight:600}
+h1{font-size:28px;font-weight:800;color:var(--dark);line-height:1.2;margin-bottom:6px}
+.subtitle{font-size:15px;color:var(--text-med);margin-bottom:14px;line-height:1.5}
+.intro{font-size:14px;line-height:1.7;color:var(--text)}
+.sticky-bar{position:sticky;top:0;z-index:10;background:var(--bg);padding:10px 0;margin-bottom:8px}
+.sticky-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;font-size:13px;font-weight:600}
+.sticky-answered{color:var(--text-med)}
+.sticky-remaining{color:var(--orange)}
+.sticky-complete{color:var(--teal)}
+.progress-track{height:4px;background:#eee;border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;border-radius:2px;transition:width .3s ease}
+.section-card{background:var(--white);border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.08);border:1px solid #e8e8e8}
+.section-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;gap:10px}
+.section-title{font-size:17px;font-weight:700;color:var(--teal)}
+.section-score{background:#f5f5f5;border-radius:8px;padding:4px 12px;font-size:13px;font-weight:600;color:var(--text-med);white-space:nowrap;flex-shrink:0}
+.section-score.active{background:var(--teal-light);color:var(--teal)}
+.section-desc{font-size:13px;line-height:1.6;color:var(--text-med);margin-bottom:8px}
+.section-progress{height:4px;background:#eee;border-radius:2px;overflow:hidden;margin-bottom:6px}
+.section-answered{font-size:11px;color:var(--text-med);margin-bottom:10px}
+.question{padding:14px 0;border-bottom:1px solid #eee}
+.question:last-child{border-bottom:none}
+.question-text{font-size:14px;line-height:1.5;color:var(--text);margin-bottom:10px}
+.question-num{color:var(--text-med);font-weight:600;margin-right:6px}
+.rating-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.rating-label{font-size:10px;color:var(--text-med);min-width:50px}
+.rating-label.left{text-align:right}
+.rating-label.right{text-align:left}
+.rating-btn{width:40px;height:40px;border-radius:50%;border:2px solid #ddd;background:var(--white);color:var(--text);font-size:15px;font-weight:500;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}
+.rating-btn.selected{border-color:var(--teal);background:var(--teal);color:var(--white);font-weight:700}
+.results{background:var(--white);border-radius:12px;padding:24px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.08);border:2px solid #e8e8e8;display:none}
+.results.visible{display:block}
+.results.complete{border-color:var(--teal)}
+.results h2{font-size:20px;font-weight:700;color:var(--dark);margin-bottom:16px}
+.big-score{display:flex;align-items:baseline;gap:6px;margin-bottom:14px}
+.big-score .num{font-size:48px;font-weight:800;line-height:1}
+.big-score .denom{font-size:18px;color:var(--text-med);font-weight:500}
+.overall-bar{height:8px;background:#eee;border-radius:4px;overflow:hidden;margin-bottom:20px}
+.breakdown{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.breakdown-item label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
+.breakdown-item label span:first-child{color:var(--text);font-weight:500}
+.breakdown-item label span:last-child{color:var(--text-med)}
+.breakdown-bar{height:6px;background:#eee;border-radius:3px;overflow:hidden}
+.interp{border-radius:10px;padding:18px 20px;border-left:4px solid;margin-bottom:16px}
+.interp.teal{background:var(--teal-light);border-color:var(--teal)}
+.interp.orange{background:var(--orange-light);border-color:var(--orange)}
+.interp-level{font-size:17px;font-weight:700;margin-bottom:6px}
+.interp p{font-size:13px;line-height:1.6;color:var(--text);margin-bottom:8px}
+.interp p:last-child{margin-bottom:0}
+.gap-box{background:var(--orange-light);border-radius:10px;padding:14px 18px;border-left:4px solid var(--orange)}
+.gap-box .gap-title{font-size:13px;font-weight:700;color:var(--orange);margin-bottom:3px}
+.gap-box p{font-size:12px;line-height:1.5;color:var(--text)}
+.incomplete-msg{font-size:13px;color:var(--text-med)}
+.reset-wrap{text-align:center;padding:14px 0 32px}
+.reset-btn{background:none;border:1px solid #ddd;border-radius:8px;padding:10px 22px;font-size:14px;color:var(--text-med);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.footer{text-align:center;padding:16px 0;border-top:1px solid #eee;font-size:12px;color:var(--text-med)}
+@media(max-width:480px){
+  h1{font-size:24px}
+  .section-card{padding:16px}
+  .section-title{font-size:15px}
+  .rating-label{min-width:40px;font-size:9px}
+  .rating-btn{width:36px;height:36px;font-size:14px}
+  .big-score .num{font-size:40px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="logo">
+      <span class="logo-m">M</span><span class="logo-v">V</span>
+      <span class="logo-label">Abra AI</span>
+    </div>
+    <h1>AI Readiness Self-Assessment</h1>
+    <p class="subtitle">Where you are now, what the gap looks like, and where to focus first.</p>
+    <p class="intro">Rate each statement based on what you actually do, not what you know you should do. The gap between those two things is exactly what this course is built to close. There are no right answers and no passing score. The point is clarity.</p>
+  </div>
+
+  <div class="sticky-bar" id="stickyBar">
+    <div class="sticky-row">
+      <span class="sticky-answered" id="answeredLabel">0 / 26 answered</span>
+      <span class="sticky-remaining" id="remainingLabel"></span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="mainProgress" style="width:0%;background:linear-gradient(90deg,#2a6171,#e8873a)"></div>
+    </div>
+  </div>
+
+  <div id="sectionsContainer"></div>
+
+  <div class="results" id="resultsPanel">
+    <h2 id="resultsTitle">Progress</h2>
+    <div class="big-score">
+      <span class="num" id="totalScore">0</span>
+      <span class="denom">/ 130</span>
+    </div>
+    <div class="overall-bar">
+      <div class="progress-fill" id="overallBar" style="width:0%;background:linear-gradient(90deg,#e8873a,#2a6171)"></div>
+    </div>
+    <div class="breakdown" id="breakdown"></div>
+    <div id="interpBox"></div>
+    <div id="gapBox"></div>
+    <p class="incomplete-msg" id="incompleteMsg"></p>
+  </div>
+
+  <div class="reset-wrap" id="resetWrap" style="display:none">
+    <button class="reset-btn" onclick="resetAll()">Reset Assessment</button>
+  </div>
+
+  <div class="footer">Abra AI &middot; AI Business Development Course</div>
+</div>
+
+<script>
+const sections=[
+{id:"prompting",title:"Communication & Prompting",description:"How effectively do you communicate with AI tools? The intent gap \u2014 the distance between what you mean and what the AI interprets \u2014 is the single biggest factor in output quality.",items:["I provide specific context about my business, audience, and constraints before asking AI for anything.","I define the exact deliverable I want (format, length, tone, structure) before I start prompting.","I have reusable prompt templates that I use regularly for recurring tasks.","When AI output is generic or off-target, I refine my prompt with more detail rather than accepting mediocre results.","I use RCOF or a similar structure to organize my prompts rather than writing freeform requests.","I can describe the difference between a vague prompt and a specific one and explain why specificity matters.","I iterate on AI conversations across multiple turns, building context and refining output progressively."]},
+{id:"critical",title:"Critical Thinking & Output Evaluation",description:"AI produces fluent, confident-sounding text regardless of whether it is accurate, relevant, or useful. Do you have the evaluation habits to catch problems before they reach your audience?",items:["I check AI output for logical consistency before using it.","I verify any specific statistics, case studies, or factual claims that AI generates before including them in work product.","I can identify when AI output is generic versus specific to my situation.","I test AI output against my own domain expertise and push back when recommendations contradict my experience.","I actively watch for hallucination, averaging, recency bias, and sycophancy.","I ask AI to critique its own output or list its assumptions before I accept the response.","I would never publish or present AI-generated content without reviewing it through an evaluation filter."]},
+{id:"tools",title:"Tool Selection & Stack Design",description:"Owning AI tools and using them effectively are two different things. Is your current stack intentional and integrated, or have you collected subscriptions without a clear reason for each one?",items:["I can name the primary AI tool I use for each of the five functional categories (thinking, creation, automation, data, communication).","I evaluate new AI tools against my actual workflow needs before signing up.","My AI tools are connected so data flows between them without manual copy-pasting.","I have eliminated tools that overlap in function with something I already use.","I know exactly how much I spend per month on AI tools and can justify each subscription.","When I adopt a new tool, I set a 30-day evaluation period with specific success criteria."]},
+{id:"execution",title:"Execution & Workflow Integration",description:"The real test is not whether you can get a good response from ChatGPT. It is whether AI is embedded in your actual business operations in a way that saves time, reduces errors, or generates revenue.",items:["I have at least one business process where AI runs automatically without my involvement.","Before implementing any AI solution, I define the specific outcome and how I will measure success.","I have mapped my core business processes and identified which steps are candidates for AI automation.","I start with the simplest possible AI solution before investing in more complex tools or custom builds.","I can calculate the ROI of my AI implementations in terms of hours saved or revenue generated.","I regularly review and update my AI workflows based on what is working versus what is not."]}
+];
+
+const interpretations=[
+{min:26,max:52,level:"Early Stage",color:"#e8873a",desc:"You are aware of AI but have not yet built the habits or systems to use it effectively. This is not a problem \u2014 it is a starting point. Most people are here.",focus:"Start with Chapters 1 and 2 of this course. Your biggest gains will come from learning to communicate with AI precisely and developing the critical thinking skills to evaluate output. Do not buy more tools yet."},
+{min:53,max:84,level:"Building",color:"#d4a017",desc:"You have some working AI habits but significant gaps remain. You likely use AI for content or brainstorming but have not integrated it into your operations or built repeatable systems.",focus:"Focus on whichever section scored lowest. If it is Tools, work through Chapter 4. If it is Execution, work through Chapter 5. Your prompting skills are probably decent but your systems are not catching up."},
+{min:85,max:110,level:"Operational",color:"#2a6171",desc:"AI is part of your workflow and you have real systems in place. You are past the experimentation phase. Your opportunity is optimization and closing the remaining gaps.",focus:"Look at individual items where you scored 1 or 2. Those specific gaps are costing you more than you think. Target those and build automation around the processes you identified in Section 4."},
+{min:111,max:130,level:"Advanced",color:"#2d8a2d",desc:"AI is deeply integrated into how you run your business. You have strong habits across all four areas.",focus:"Your next move is teaching others or scaling what you have built. Consider how your AI systems can serve customers directly, not just internal operations."}
+];
+
+const scores={};
+const totalQuestions=sections.reduce((s,sec)=>s+sec.items.length,0);
+
+function render(){
+  const c=document.getElementById('sectionsContainer');
+  c.innerHTML='';
+  sections.forEach((sec,si)=>{
+    const total=sec.items.reduce((s,_,i)=>(scores[sec.id+'-'+i]||0)+s,0);
+    const max=sec.items.length*5;
+    const pct=max>0?(total/max)*100:0;
+    const answered=sec.items.filter((_,i)=>scores[sec.id+'-'+i]).length;
+    let html=`<div class="section-card">
+      <div class="section-header">
+        <div class="section-title">Section ${si+1}: ${sec.title}</div>
+        <div class="section-score${pct>0?' active':''}">${total} / ${max}</div>
+      </div>
+      <p class="section-desc">${sec.description}</p>
+      <div class="section-progress"><div class="progress-fill" style="width:${pct}%;background:linear-gradient(90deg,#2a6171,#e8873a)"></div></div>
+      <div class="section-answered">${answered} of ${sec.items.length} answered</div>`;
+    sec.items.forEach((item,i)=>{
+      const val=scores[sec.id+'-'+i]||0;
+      html+=`<div class="question">
+        <div class="question-text"><span class="question-num">${i+1}.</span>${item}</div>
+        <div class="rating-row">
+          <span class="rating-label left">Not at all</span>`;
+      for(let v=1;v<=5;v++){
+        html+=`<button class="rating-btn${val===v?' selected':''}" onclick="rate('${sec.id}',${i},${v})">${v}</button>`;
+      }
+      html+=`<span class="rating-label right">Consistently</span>
+        </div></div>`;
+    });
+    html+='</div>';
+    c.innerHTML+=html;
+  });
+}
+
+function rate(secId,qi,val){
+  scores[secId+'-'+qi]=val;
+  update();
+}
+
+function update(){
+  const answered=Object.values(scores).filter(v=>v>0).length;
+  const total=Object.values(scores).reduce((a,b)=>a+b,0);
+  const isComplete=answered===totalQuestions;
+
+  document.getElementById('answeredLabel').textContent=answered+' / '+totalQuestions+' answered';
+  const rl=document.getElementById('remainingLabel');
+  if(isComplete){rl.textContent='Complete';rl.className='sticky-complete';}
+  else if(answered>0){rl.textContent=(totalQuestions-answered)+' remaining';rl.className='sticky-remaining';}
+  else{rl.textContent='';}
+  document.getElementById('mainProgress').style.width=(answered/totalQuestions*100)+'%';
+  if(isComplete)document.getElementById('mainProgress').style.background='#2a6171';
+
+  // Re-render section cards
+  render();
+
+  // Results panel
+  const rp=document.getElementById('resultsPanel');
+  if(answered===0){rp.classList.remove('visible');document.getElementById('resetWrap').style.display='none';return;}
+  rp.classList.add('visible');
+  document.getElementById('resetWrap').style.display='';
+
+  document.getElementById('resultsTitle').textContent=isComplete?'Your Results':'Progress';
+  rp.classList.toggle('complete',isComplete);
+
+  const interp=interpretations.find(i=>total>=i.min&&total<=i.max);
+  document.getElementById('totalScore').style.color=interp?interp.color:'#666';
+  document.getElementById('totalScore').textContent=total;
+  document.getElementById('overallBar').style.width=(total/130*100)+'%';
+
+  // Breakdown
+  const bd=document.getElementById('breakdown');
+  let lowestPct=999,lowestId='';
+  const secScores=sections.map(s=>{
+    const sc=s.items.reduce((sum,_,i)=>(scores[s.id+'-'+i]||0)+sum,0);
+    const mx=s.items.length*5;
+    const p=mx>0?sc/mx:0;
+    if(p<lowestPct){lowestPct=p;lowestId=s.id;}
+    return{...s,score:sc,max:mx,pct:p};
+  });
+  bd.innerHTML=secScores.map(s=>`<div class="breakdown-item">
+    <label><span>${s.title}</span><span>${s.score}/${s.max}</span></label>
+    <div class="breakdown-bar"><div class="progress-fill" style="width:${s.pct*100}%;background:${s.id===lowestId&&isComplete?'#e8873a':'#2a6171'}"></div></div>
+  </div>`).join('');
+
+  // Interpretation
+  const ib=document.getElementById('interpBox');
+  if(isComplete&&interp){
+    ib.innerHTML=`<div class="interp teal" style="border-color:${interp.color}">
+      <div class="interp-level" style="color:${interp.color}">${interp.level}</div>
+      <p>${interp.desc}</p>
+      <p><strong>Where to focus:</strong> ${interp.focus}</p>
+    </div>`;
+  }else{ib.innerHTML='';}
+
+  // Gap box
+  const gb=document.getElementById('gapBox');
+  if(isComplete){
+    const low=secScores.find(s=>s.id===lowestId);
+    gb.innerHTML=`<div class="gap-box">
+      <div class="gap-title">Your biggest gap: ${low.title}</div>
+      <p>This section scored ${Math.round(low.pct*100)}% \u2014 the lowest of your four areas. Start here for the highest-impact improvement.</p>
+    </div>`;
+  }else{gb.innerHTML='';}
+
+  // Incomplete msg
+  const im=document.getElementById('incompleteMsg');
+  if(!isComplete){im.textContent=answered+' of '+totalQuestions+' questions answered. '+(totalQuestions-answered)+' remaining.';}
+  else{im.textContent='';}
+
+  if(isComplete){
+    setTimeout(()=>{rp.scrollIntoView({behavior:'smooth',block:'start'});},150);
+  }
+}
+
+function resetAll(){
+  Object.keys(scores).forEach(k=>delete scores[k]);
+  update();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+render();
+</script>
+</body>
+</html>

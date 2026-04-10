@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tool Comparison Worksheet - Abra AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --teal: #2a6171;
+            --teal-light: #e8f0f3;
+            --orange: #e8873a;
+            --orange-light: #fef3e8;
+            --dark: #1a1a2e;
+            --text: #2d2d2d;
+            --text-med: #666;
+            --bg: #fafafa;
+            --white: #fff;
+            --green: #3fa796;
+            --yellow: #f5b844;
+            --red: #e74c3c;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            border-bottom: 2px solid var(--teal-light);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-mv {
+            display: flex;
+            gap: 0.05rem;
+        }
+
+        .logo-m {
+            color: var(--teal);
+        }
+
+        .logo-v {
+            color: var(--orange);
+        }
+
+        .logo-label {
+            font-size: 0.75rem;
+            color: var(--text-med);
+            font-weight: 500;
+            margin-left: 0.5rem;
+        }
+
+        .header-title {
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .header-title h1 {
+            font-size: 1.5rem;
+            color: var(--teal);
+            margin-bottom: 0.25rem;
+        }
+
+        .header-title p {
+            font-size: 0.875rem;
+            color: var(--text-med);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 2rem;
+        }
+
+        /* Tabs Navigation */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--teal-light);
+            background: var(--white);
+            padding: 0;
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            background: transparent;
+            color: var(--text-med);
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .tab-button:hover {
+            background: var(--teal-light);
+            color: var(--teal);
+        }
+
+        .tab-button.active {
+            color: var(--teal);
+            border-bottom-color: var(--teal);
+            background: var(--teal-light);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Common Styles */
+        .section {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--teal);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-desc {
+            color: var(--text-med);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* Cards and Tables */
+        .category-card {
+            background: var(--white);
+            border: 2px solid var(--teal-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .category-card:hover {
+            border-color: var(--teal);
+            box-shadow: 0 2px 8px rgba(42, 97, 113, 0.1);
+        }
+
+        .category-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--teal);
+            margin-bottom: 0.25rem;
+        }
+
+        .category-examples {
+            font-size: 0.85rem;
+            color: var(--text-med);
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(42, 97, 113, 0.1);
+        }
+
+        /* Rating Buttons */
+        .rating-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .rating-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            background: var(--white);
+            color: var(--text-med);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .rating-btn:hover {
+            border-color: var(--teal);
+            color: var(--teal);
+        }
+
+        .rating-btn.selected {
+            background: var(--teal);
+            color: var(--white);
+            border-color: var(--teal);
+        }
+
+        /* Alerts and Warnings */
+        .alert {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+            font-size: 0.95rem;
+        }
+
+        .alert-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+
+        .alert-green {
+            background: #e8f5e9;
+            color: var(--green);
+            border-left: 4px solid var(--green);
+        }
+
+        .alert-yellow {
+            background: #fff8e1;
+            color: #f5b844;
+            border-left: 4px solid #f5b844;
+        }
+
+        .alert-orange {
+            background: #ffe8d6;
+            color: var(--orange);
+            border-left: 4px solid var(--orange);
+        }
+
+        .alert-red {
+            background: #ffebee;
+            color: var(--red);
+            border-left: 4px solid var(--red);
+        }
+
+        /* Metrics Row */
+        .metrics-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .metric-card {
+            background: var(--teal-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--teal);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: var(--text-med);
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comparison-table th {
+            background: var(--teal-light);
+            color: var(--teal);
+            font-weight: 600;
+        }
+
+        .comparison-table tr:hover {
+            background: var(--teal-light);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--teal);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: #1f4852;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(42, 97, 113, 0.2);
+        }
+
+        .btn-secondary {
+            background: var(--orange-light);
+            color: var(--orange);
+            border: 2px solid var(--orange);
+        }
+
+        .btn-secondary:hover {
+            background: var(--orange);
+            color: var(--white);
+        }
+
+        .btn-danger {
+            background: var(--red);
+            color: var(--white);
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-success {
+            background: var(--green);
+            color: var(--white);
+        }
+
+        .btn-success:hover {
+            background: #318b7c;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .grid-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Trial Tracker */
+        .week-tracker {
+            background: var(--teal-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .week-title {
+            font-weight: 600;
+            color: var(--teal);
+            margin-bottom: 1rem;
+        }
+
+        /* Decision Result */
+        .decision-box {
+            background: var(--teal-light);
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .decision-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--teal);
+            margin-bottom: 0.5rem;
+        }
+
+        .decision-detail {
+            color: var(--text-med);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-group-center {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-title {
+                margin-left: 0;
+                text-align: center;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab-button {
+                font-size: 0.85rem;
+                padding: 0.75rem 0.5rem;
+            }
+
+            .grid-form {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.75rem;
+            }
+
+            .container {
+                padding: 0 1rem 1.5rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Helper Classes */
+        .mb-1 { margin-bottom: 1rem; }
+        .mb-2 { margin-bottom: 2rem; }
+        .mt-1 { margin-top: 1rem; }
+        .mt-2 { margin-top: 2rem; }
+
+        .text-center { text-align: center; }
+        .text-small { font-size: 0.85rem; color: var(--text-med); }
+
+        .hidden { display: none; }
+
+        /* Action Links */
+        .action-link {
+            color: var(--teal);
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .action-link:hover {
+            color: var(--orange);
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-mv">
+                    <span class="logo-m">M</span><span class="logo-v">V</span>
+                </div>
+                <div class="logo-label">Abra AI</div>
+            </div>
+            <div class="header-title">
+                <h1>AI Tool Comparison Worksheet</h1>
+                <p>Chapter 4: Tool Assessment & Collaboration</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-button active" data-tab="audit">Current Stack Audit</button>
+            <button class="tab-button" data-tab="fits">FITS Framework</button>
+            <button class="tab-button" data-tab="comparison">Head-to-Head</button>
+            <button class="tab-button" data-tab="trial">30-Day Trial</button>
+        </div>
+
+        <!-- Section 1: Current Stack Audit -->
+        <div id="audit" class="tab-content active">
+            <div class="section">
+                <h2 class="section-title">📊 Current Stack Audit</h2>
+                <p class="section-desc">Document the AI tools you're currently using, their monthly costs, and satisfaction levels. This helps identify gaps and overlaps in your tool stack.</p>
+
+                <!-- Metrics -->
+                <div class="metrics-row">
+                    <div class="metric-card">
+                        <div class="metric-value" id="totalSpend">$0</div>
+                        <div class="metric-label">Monthly Spend</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="toolCount">0</div>
+                        <div class="metric-label">Tools Tracked</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="avgSatisfaction">0</div>
+                        <div class="metric-label">Avg Satisfaction</div>
+                    </div>
+                </div>
+
+                <!-- Alerts -->
+                <div id="auditAlerts"></div>
+
+                <!-- Tool Categories -->
+                <div id="auditCategories"></div>
+
+                <button class="btn btn-primary mt-2" onclick="downloadAudit()">📥 Download Audit Report</button>
+            </div>
+        </div>
+
+        <!-- Section 2: FITS Framework -->
+        <div id="fits" class="tab-content">
+            <div class="section">
+                <h2 class="section-title">🎯 FITS Framework Evaluator</h2>
+                <p class="section-desc">Use the FITS framework to evaluate new tools before adopting them. Function, Integration, Time-to-Value, and Switching Cost determine if a tool is worth your investment.</p>
+
+                <div class="grid-form">
+                    <div class="form-group">
+                        <label>Tool Name</label>
+                        <input type="text" id="fitToolName" placeholder="e.g., ChatGPT, Midjourney">
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="fitCategory">
+                            <option value="">Select category...</option>
+                            <option value="thinking">Thinking (Strategy & Analysis)</option>
+                            <option value="creation">Creation (Content & Design)</option>
+                            <option value="automation">Automation (Workflow & Integration)</option>
+                            <option value="data">Data (Analysis & Intelligence)</option>
+                            <option value="communication">Communication (Outreach & Engagement)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>What do you already use in this category?</label>
+                    <input type="text" id="fitCurrentTools" placeholder="Current tools..." readonly style="background: var(--teal-light); cursor: not-allowed;">
+                </div>
+
+                <!-- FITS Scoring -->
+                <div class="mt-2">
+                    <div class="form-group">
+                        <label>F - Function: Does it solve a specific problem you have right now?</label>
+                        <p class="text-small mb-1">5=Real recurring problem • 3=Problem but unsure how often • 1=No specific problem</p>
+                        <div class="rating-buttons" data-rating="fitF">
+                            <button class="rating-btn" data-value="1">1</button>
+                            <button class="rating-btn" data-value="2">2</button>
+                            <button class="rating-btn" data-value="3">3</button>
+                            <button class="rating-btn" data-value="4">4</button>
+                            <button class="rating-btn" data-value="5">5</button>
+                        </div>
+                        <span id="fitFValue" class="text-small mt-1">Not rated</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>I - Integration: Does it connect to existing tools?</label>
+                        <p class="text-small mb-1">5=Native integrations • 3=Via Zapier/Make • 1=Standalone/manual</p>
+                        <div class="rating-buttons" data-rating="fitI">
+                            <button class="rating-btn" data-value="1">1</button>
+                            <button class="rating-btn" data-value="2">2</button>
+                            <button class="rating-btn" data-value="3">3</button>
+                            <button class="rating-btn" data-value="4">4</button>
+                            <button class="rating-btn" data-value="5">5</button>
+                        </div>
+                        <span id="fitIValue" class="text-small mt-1">Not rated</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>T - Time-to-Value: How quickly will you see results?</label>
+                        <p class="text-small mb-1">5=First hour • 3=First week • 1=Weeks of setup</p>
+                        <div class="rating-buttons" data-rating="fitT">
+                            <button class="rating-btn" data-value="1">1</button>
+                            <button class="rating-btn" data-value="2">2</button>
+                            <button class="rating-btn" data-value="3">3</button>
+                            <button class="rating-btn" data-value="4">4</button>
+                            <button class="rating-btn" data-value="5">5</button>
+                        </div>
+                        <span id="fitTValue" class="text-small mt-1">Not rated</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>S - Switching Cost: What if you stop using it?</label>
+                        <p class="text-small mb-1">5=Easy cancel/export • 3=Some lock-in • 1=Deep lock-in</p>
+                        <div class="rating-buttons" data-rating="fitS">
+                            <button class="rating-btn" data-value="1">1</button>
+                            <button class="rating-btn" data-value="2">2</button>
+                            <button class="rating-btn" data-value="3">3</button>
+                            <button class="rating-btn" data-value="4">4</button>
+                            <button class="rating-btn" data-value="5">5</button>
+                        </div>
+                        <span id="fitSValue" class="text-small mt-1">Not rated</span>
+                    </div>
+                </div>
+
+                <!-- FITS Result -->
+                <div id="fitsResult" class="hidden mt-2">
+                    <div class="decision-box">
+                        <div class="decision-title" id="fitsScoreDisplay">FITS Score: --/20</div>
+                        <div class="decision-detail" id="fitsInterpretation"></div>
+                    </div>
+                </div>
+
+                <div class="btn-group mt-2">
+                    <button class="btn btn-primary" onclick="calculateFITS()">Calculate FITS Score</button>
+                    <button class="btn btn-secondary" onclick="resetFITS()">Clear Form</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Head-to-Head Comparison -->
+        <div id="comparison" class="tab-content">
+            <div class="section">
+                <h2 class="section-title">⚔️ Head-to-Head Comparison</h2>
+                <p class="section-desc">Compare two tools side by side to determine which one is the better investment for your workflow.</p>
+
+                <div class="grid-form">
+                    <div class="form-group">
+                        <label>Tool A Name</label>
+                        <input type="text" id="toolAName" placeholder="e.g., ChatGPT">
+                    </div>
+                    <div class="form-group">
+                        <label>Tool B Name</label>
+                        <input type="text" id="toolBName" placeholder="e.g., Claude">
+                    </div>
+                </div>
+
+                <div class="grid-form">
+                    <div class="form-group">
+                        <label>Tool A - Monthly Cost ($)</label>
+                        <input type="number" id="toolAPrice" min="0" step="0.01" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Tool B - Monthly Cost ($)</label>
+                        <input type="number" id="toolBPrice" min="0" step="0.01" placeholder="0">
+                    </div>
+                </div>
+
+                <div class="grid-form">
+                    <div class="form-group">
+                        <label>Tool A - Hours Saved/Week</label>
+                        <input type="number" id="toolAHours" min="0" step="0.5" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Tool B - Hours Saved/Week</label>
+                        <input type="number" id="toolBHours" min="0" step="0.5" placeholder="0">
+                    </div>
+                </div>
+
+                <!-- FITS Scores for Comparison -->
+                <div class="mt-2">
+                    <h3 style="color: var(--teal); margin: 1.5rem 0 1rem;">Tool A - FITS Scores</h3>
+                    <div class="grid-form">
+                        <div class="form-group">
+                            <label>Function (1-5)</label>
+                            <div class="rating-buttons" data-rating="compAF">
+                                <button class="rating-btn" data-value="1">1</button>
+                                <button class="rating-btn" data-value="2">2</button>
+                                <button class="rating-btn" data-value="3">3</button>
+                                <button class="rating-btn" data-value="4">4</button>
+                                <button class="rating-btn" data-value="5">5</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Integration (1-5)</label>
+                            <div class="rating-buttons" data-rating="compAI">
+                                <button class="rating-btn" data-value="1">1</button>
+                                <button class="rating-btn" data-value="2">2</button>
+                                <button class="rating-btn" data-value="3">3</button>
+                                <button class="rating-btn" data-value="4">4</button>
+                                <button class="rating-btn" data-value="5">5</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Time-to-Value (1-5)</label>
+                            <div class="rating-buttons" data-rating="compAT">
+                                <button class="rating-btn" data-value="1">1</button>
+                                <button class="rating-btn" data-value="2">2</button>
+                                <button class="rating-btn" data-value="3">3</button>
+                                <button class="rating-btn" data-value="4">4</button>
+                                <button class="rating-btn" data-value="5">5</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Switching Cost (1-5)</label>
+                            <div class="rating-buttons" data-rating="compAS">
+                                <button class="rating-btn" data-value="1">1</button>
+                                <button class="rating-btn" data-value="2">2</button>
+                                <button class="rating-btn" data-value="3">3</button>
+                                <button class="rating-btn" data-value="4">4</button>
+                                <button class="rating-btn" data-value="5">5</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 style="color: var(--teal); margin: 1.5rem 0 1rem;">Tool B - FITS Scores</h3>
+                    <div class="grid-form">
+                        <div class="form-group">
+                            <label>Function (1-5)</label>
+                            <div class="rating-buttons" data-rating="compBF">
+                                <button class="rating-btn" data-value="1">1</button>
+                                <button class="rating-btn" data-value="2">2</button>
+                                <button class="rating-btn" data-value="3">3</button>
+                                <button class="rating-btn" data-value="4">4</button>
+                                <button class="rating-btn" data-value="5">5</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Integration (1-5)</label>
+                            <div class="rating-buttons" data-rating="compBI">
+                                <button class="rating-btn" data-value="1">1</button>
+                                <button class="rating-btn" data-value="2">2</button>
+                                <button class="rating-btn" data-value="3">3</button>
+                                <button class="rating-btn" data-value="4">4</button>
+                                <button class="rating-btn" data-value="5">5</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Time-to-Value (1-5)</label>
+                            <div class="rating-buttons" data-rating="compBT">
+                                <button class="rating-btn" data-value="1">1</button>
+                                <button class="rating-btn" data-value="2">2</button>
+                                <button class="rating-btn" data-value="3">3</button>
+                                <button class="rating-btn" data-value="4">4</button>
+                                <button class="rating-btn" data-value="5">5</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Switching Cost (1-5)</label>
+                            <div class="rating-buttons" data-rating="compBS">
+                                <button class="rating-btn" data-value="1">1</button>
+                                <button class="rating-btn" data-value="2">2</button>
+                                <button class="rating-btn" data-value="3">3</button>
+                                <button class="rating-btn" data-value="4">4</button>
+                                <button class="rating-btn" data-value="5">5</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comparison Result -->
+                <div id="comparisonResult" class="hidden mt-2">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th id="compHeaderA">-</th>
+                                <th id="compHeaderB">-</th>
+                                <th>Winner</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Monthly Cost</td>
+                                <td id="compAPrice">-</td>
+                                <td id="compBPrice">-</td>
+                                <td id="compPriceWinner">-</td>
+                            </tr>
+                            <tr>
+                                <td>FITS Score</td>
+                                <td id="compAFITS">-</td>
+                                <td id="compBFITS">-</td>
+                                <td id="compFITSWinner">-</td>
+                            </tr>
+                            <tr>
+                                <td>Hours Saved/Week</td>
+                                <td id="compAHours">-</td>
+                                <td id="compBHours">-</td>
+                                <td id="compHoursWinner">-</td>
+                            </tr>
+                            <tr>
+                                <td>Cost per Hour Saved</td>
+                                <td id="compACostPerHour">-</td>
+                                <td id="compBCostPerHour">-</td>
+                                <td id="compCostPerHourWinner">-</td>
+                            </tr>
+                            <tr>
+                                <td>Monthly ROI Value</td>
+                                <td id="compAROI">-</td>
+                                <td id="compBROI">-</td>
+                                <td id="compROIWinner">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="decision-box">
+                        <div class="decision-title" id="compWinner">Recommendation</div>
+                        <div class="decision-detail" id="compReasoning"></div>
+                    </div>
+                </div>
+
+                <div class="btn-group mt-2">
+                    <button class="btn btn-primary" onclick="compareTools()">Compare Tools</button>
+                    <button class="btn btn-secondary" onclick="resetComparison()">Clear Form</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: 30-Day Trial Protocol -->
+        <div id="trial" class="tab-content">
+            <div class="section">
+                <h2 class="section-title">🧪 30-Day Trial Protocol</h2>
+                <p class="section-desc">Track your tool trial systematically with weekly check-ins and a final decision based on measurable value.</p>
+
+                <div class="grid-form">
+                    <div class="form-group">
+                        <label>Tool Name</label>
+                        <input type="text" id="trialToolName" placeholder="e.g., Perplexity Pro">
+                    </div>
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" id="trialStartDate">
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" id="trialEndDate">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Success Threshold</label>
+                    <input type="text" id="trialThreshold" placeholder="e.g., If this saves me at least 3 hours/week">
+                </div>
+
+                <!-- Weekly Check-ins -->
+                <div id="trialWeeks"></div>
+
+                <!-- Trial Result -->
+                <div id="trialResult" class="hidden mt-2">
+                    <div class="decision-box">
+                        <div class="metric-value" id="trialTotalHours">0 hrs</div>
+                        <div class="decision-detail">Total Hours Saved</div>
+                    </div>
+
+                    <div class="metrics-row">
+                        <div class="metric-card">
+                            <div class="metric-value" id="trialTotalCost">$0</div>
+                            <div class="metric-label">Trial Cost</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="trialValueSaved">$0</div>
+                            <div class="metric-label">Value of Time Saved</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="trialNetROI">$0</div>
+                            <div class="metric-label">Net ROI</div>
+                        </div>
+                    </div>
+
+                    <div class="decision-box" id="trialDecisionBox">
+                        <div class="decision-title" id="trialDecision">Recommendation</div>
+                        <div class="decision-detail" id="trialReasoning"></div>
+                        <div class="btn-group-center">
+                            <button class="btn btn-success" onclick="recordTrialDecision('keep')">✓ KEEP</button>
+                            <button class="btn btn-secondary" onclick="recordTrialDecision('extend')">↻ EXTEND TRIAL</button>
+                            <button class="btn btn-danger" onclick="recordTrialDecision('cancel')">✕ CANCEL</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-group mt-2">
+                    <button class="btn btn-primary" onclick="generateTrialWeeks()">Start Trial Tracking</button>
+                    <button class="btn btn-secondary" onclick="calculateTrial()">Calculate Day 30 Verdict</button>
+                    <button class="btn btn-secondary" onclick="resetTrial()">Clear Form</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Data Structure
+        const state = {
+            audit: {
+                categories: [
+                    { id: 'thinking', name: 'Thinking (Strategy & Analysis)', examples: 'ChatGPT, Claude, Gemini, Perplexity', tools: [] },
+                    { id: 'creation', name: 'Creation (Content & Design)', examples: 'Midjourney, DALL-E, Canva AI, Runway, ElevenLabs', tools: [] },
+                    { id: 'automation', name: 'Automation (Workflow & Integration)', examples: 'Make, Zapier, n8n', tools: [] },
+                    { id: 'data', name: 'Data (Analysis & Intelligence)', examples: 'Google Sheets AI, Excel Copilot, Rows.com', tools: [] },
+                    { id: 'communication', name: 'Communication (Outreach & Engagement)', examples: 'GoHighLevel, HubSpot, Instantly', tools: [] }
+                ]
+            },
+            fits: { f: 0, i: 0, t: 0, s: 0 },
+            comparison: { aF: 0, aI: 0, aT: 0, aS: 0, bF: 0, bI: 0, bT: 0, bS: 0 },
+            trial: { weeks: [null, null, null, null], decision: null }
+        };
+
+        // Tab Navigation
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                e.target.classList.add('active');
+                document.getElementById(e.target.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Rating Buttons
+        document.querySelectorAll('.rating-buttons').forEach(group => {
+            group.querySelectorAll('.rating-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    group.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+                    e.target.classList.add('selected');
+                    const ratingKey = group.dataset.rating;
+                    const value = parseInt(e.target.dataset.value);
+
+                    if (ratingKey.startsWith('fitF') || ratingKey.startsWith('fitI') || ratingKey.startsWith('fitT') || ratingKey.startsWith('fitS')) {
+                        const key = ratingKey.slice(3).toLowerCase();
+                        state.fits[key] = value;
+                        updateFITSDisplay();
+                    } else if (ratingKey.startsWith('comp')) {
+                        const tool = ratingKey[4];
+                        const dimension = ratingKey[5];
+                        state.comparison[`${tool.toLowerCase()}${dimension}`] = value;
+                    }
+                });
+            });
+        });
+
+        // Initialize Audit View
+        function initializeAudit() {
+            const container = document.getElementById('auditCategories');
+            container.innerHTML = state.audit.categories.map(cat => `
+                <div class="category-card">
+                    <div class="category-name">${cat.name}</div>
+                    <div class="category-examples">${cat.examples}</div>
+                    <div class="form-group">
+                        <label>Current Tool(s)</label>
+                        <input type="text" class="audit-tool-input" data-category="${cat.id}" placeholder="Enter tools (comma-separated)">
+                    </div>
+                    <div class="grid-form">
+                        <div class="form-group">
+                            <label>Monthly Cost ($)</label>
+                            <input type="number" class="audit-cost-input" data-category="${cat.id}" min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label>Satisfaction (1-5)</label>
+                            <div class="rating-buttons" data-category="${cat.id}">
+                                <button class="rating-btn" data-value="1">1</button>
+                                <button class="rating-btn" data-value="2">2</button>
+                                <button class="rating-btn" data-value="3">3</button>
+                                <button class="rating-btn" data-value="4">4</button>
+                                <button class="rating-btn" data-value="5">5</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add event listeners for audit inputs
+            document.querySelectorAll('.audit-tool-input, .audit-cost-input').forEach(input => {
+                input.addEventListener('change', updateAuditMetrics);
+            });
+
+            document.querySelectorAll('.category-card .rating-buttons').forEach(group => {
+                group.querySelectorAll('.rating-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        group.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+                        e.target.classList.add('selected');
+                        updateAuditMetrics();
+                    });
+                });
+            });
+        }
+
+        function updateAuditMetrics() {
+            let totalSpend = 0;
+            let toolCount = 0;
+            let totalSatisfaction = 0;
+            let toolsWithSatisfaction = 0;
+            const gaps = [];
+            const overlaps = [];
+
+            state.audit.categories.forEach(cat => {
+                const toolInput = document.querySelector(`[data-category="${cat.id}"].audit-tool-input`);
+                const costInput = document.querySelector(`[data-category="${cat.id}"].audit-cost-input`);
+                const ratingGroup = document.querySelector(`.category-card .rating-buttons[data-category="${cat.id}"]`);
+                const selectedRating = ratingGroup?.querySelector('.rating-btn.selected');
+
+                if (toolInput?.value) {
+                    toolCount++;
+                    totalSpend += parseFloat(costInput?.value || 0);
+                    if (selectedRating) {
+                        totalSatisfaction += parseInt(selectedRating.dataset.value);
+                        toolsWithSatisfaction++;
+                    }
+                } else {
+                    gaps.push(cat.name);
+                }
+            });
+
+            document.getElementById('totalSpend').textContent = `$${totalSpend.toFixed(2)}`;
+            document.getElementById('toolCount').textContent = toolCount;
+            document.getElementById('avgSatisfaction').textContent = toolsWithSatisfaction > 0 ? (totalSatisfaction / toolsWithSatisfaction).toFixed(1) : '0';
+
+            // Display alerts
+            const alertsContainer = document.getElementById('auditAlerts');
+            let alertsHTML = '';
+
+            if (gaps.length > 0) {
+                alertsHTML += `<div class="alert alert-yellow"><div class="alert-icon">⚠️</div><div>Missing coverage: ${gaps.join(', ')}</div></div>`;
+            }
+
+            if (totalSpend > 100) {
+                alertsHTML += `<div class="alert alert-orange"><div class="alert-icon">💡</div><div>You're spending $${totalSpend.toFixed(2)}/month on AI tools. Consider if each tool is earning its spot.</div></div>`;
+            }
+
+            if (toolCount > 0 && totalSatisfaction / toolsWithSatisfaction < 3) {
+                alertsHTML += `<div class="alert alert-yellow"><div class="alert-icon">😕</div><div>Your average satisfaction is low. Consider replacing underperformers.</div></div>`;
+            }
+
+            if (toolCount > 0 && totalSatisfaction / toolsWithSatisfaction >= 4) {
+                alertsHTML += `<div class="alert alert-green"><div class="alert-icon">✓</div><div>Great satisfaction scores! Your current stack is working well.</div></div>`;
+            }
+
+            alertsContainer.innerHTML = alertsHTML;
+        }
+
+        function downloadAudit() {
+            let csv = 'Category,Tools,Monthly Cost,Satisfaction\n';
+            state.audit.categories.forEach(cat => {
+                const toolInput = document.querySelector(`[data-category="${cat.id}"].audit-tool-input`);
+                const costInput = document.querySelector(`[data-category="${cat.id}"].audit-cost-input`);
+                const ratingGroup = document.querySelector(`.category-card .rating-buttons[data-category="${cat.id}"]`);
+                const selectedRating = ratingGroup?.querySelector('.rating-btn.selected');
+
+                csv += `"${cat.name}","${toolInput?.value || 'N/A'}","${costInput?.value || '0'}","${selectedRating?.dataset.value || 'N/A'}"\n`;
+            });
+
+            const link = document.createElement('a');
+            link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+            link.download = 'ai-tool-audit.csv';
+            link.click();
+        }
+
+        // FITS Framework
+        function updateFITSDisplay() {
+            const values = {
+                f: state.fits.f,
+                i: state.fits.i,
+                t: state.fits.t,
+                s: state.fits.s
+            };
+
+            document.getElementById('fitFValue').textContent = values.f > 0 ? `Selected: ${values.f}/5` : 'Not rated';
+            document.getElementById('fitIValue').textContent = values.i > 0 ? `Selected: ${values.i}/5` : 'Not rated';
+            document.getElementById('fitTValue').textContent = values.t > 0 ? `Selected: ${values.t}/5` : 'Not rated';
+            document.getElementById('fitSValue').textContent = values.s > 0 ? `Selected: ${values.s}/5` : 'Not rated';
+        }
+
+        function calculateFITS() {
+            const total = state.fits.f + state.fits.i + state.fits.t + state.fits.s;
+            const result = document.getElementById('fitsResult');
+            const scoreDisplay = document.getElementById('fitsScoreDisplay');
+            const interpretation = document.getElementById('fitsInterpretation');
+
+            if (total === 0) {
+                alert('Please rate all dimensions');
+                return;
+            }
+
+            scoreDisplay.textContent = `FITS Score: ${total}/20`;
+
+            let color, message;
+            if (total >= 16) {
+                color = var(--green);
+                message = '✓ Strong candidate! This tool solves real problems with good integration and quick payoff.';
+            } else if (total >= 14) {
+                color = var(--yellow);
+                message = '⚠️ Decent option. Proceed if it fills a critical gap in your stack.';
+            } else if (total >= 10) {
+                color = var(--orange);
+                message = '⚡ Probably not worth it. The switching costs or integration friction might outweigh the benefits.';
+            } else {
+                color = var(--red);
+                message = '✕ Pass. This tool doesn\'t meet enough of your needs right now.';
+            }
+
+            interpretation.textContent = message;
+            result.classList.remove('hidden');
+        }
+
+        function resetFITS() {
+            state.fits = { f: 0, i: 0, t: 0, s: 0 };
+            document.querySelectorAll('#fits .rating-btn.selected').forEach(b => b.classList.remove('selected'));
+            document.getElementById('fitToolName').value = '';
+            document.getElementById('fitCategory').value = '';
+            document.getElementById('fitCurrentTools').value = '';
+            document.getElementById('fitsResult').classList.add('hidden');
+            updateFITSDisplay();
+        }
+
+        // Head-to-Head Comparison
+        function compareTools() {
+            const nameA = document.getElementById('toolAName').value;
+            const nameB = document.getElementById('toolBName').value;
+            const priceA = parseFloat(document.getElementById('toolAPrice').value) || 0;
+            const priceB = parseFloat(document.getElementById('toolBPrice').value) || 0;
+            const hoursA = parseFloat(document.getElementById('toolAHours').value) || 0;
+            const hoursB = parseFloat(document.getElementById('toolBHours').value) || 0;
+
+            if (!nameA || !nameB) {
+                alert('Please enter both tool names');
+                return;
+            }
+
+            const fitsA = state.comparison.aF + state.comparison.aI + state.comparison.aT + state.comparison.aS;
+            const fitsB = state.comparison.bF + state.comparison.bI + state.comparison.bT + state.comparison.bS;
+
+            const costPerHourA = hoursA > 0 ? (priceA / hoursA).toFixed(2) : 'N/A';
+            const costPerHourB = hoursB > 0 ? (priceB / hoursB).toFixed(2) : 'N/A';
+
+            const roiA = hoursA * 100 - priceA;
+            const roiB = hoursB * 100 - priceB;
+
+            document.getElementById('compHeaderA').textContent = nameA;
+            document.getElementById('compHeaderB').textContent = nameB;
+
+            document.getElementById('compAPrice').textContent = `$${priceA.toFixed(2)}`;
+            document.getElementById('compBPrice').textContent = `$${priceB.toFixed(2)}`;
+            document.getElementById('compPriceWinner').textContent = priceA < priceB ? nameA : priceB < priceA ? nameB : 'Tie';
+
+            document.getElementById('compAFITS').textContent = fitsA > 0 ? `${fitsA}/20` : '-';
+            document.getElementById('compBFITS').textContent = fitsB > 0 ? `${fitsB}/20` : '-';
+            document.getElementById('compFITSWinner').textContent = fitsA > fitsB ? nameA : fitsB > fitsA ? nameB : 'Tie';
+
+            document.getElementById('compAHours').textContent = `${hoursA} hrs`;
+            document.getElementById('compBHours').textContent = `${hoursB} hrs`;
+            document.getElementById('compHoursWinner').textContent = hoursA > hoursB ? nameA : hoursB > hoursA ? nameB : 'Tie';
+
+            document.getElementById('compACostPerHour').textContent = typeof costPerHourA === 'number' ? `$${costPerHourA}` : costPerHourA;
+            document.getElementById('compBCostPerHour').textContent = typeof costPerHourB === 'number' ? `$${costPerHourB}` : costPerHourB;
+            document.getElementById('compCostPerHourWinner').textContent = typeof costPerHourA === 'number' && typeof costPerHourB === 'number' ? (costPerHourA < costPerHourB ? nameA : nameB) : '-';
+
+            document.getElementById('compAROI').textContent = `$${roiA.toFixed(2)}`;
+            document.getElementById('compBROI').textContent = `$${roiB.toFixed(2)}`;
+            document.getElementById('compROIWinner').textContent = roiA > roiB ? nameA : roiB > roiA ? nameB : 'Tie';
+
+            let recommendation = nameA;
+            let score = 0;
+            if (fitsA > fitsB) score++;
+            if (priceA < priceB) score++;
+            if (hoursA > hoursB) score++;
+            if (roiA > roiB) score++;
+
+            if (score < 2) recommendation = nameB;
+            if (score === 2) recommendation = 'Neither has a clear advantage';
+
+            document.getElementById('compWinner').textContent = `Choose: ${recommendation}`;
+            document.getElementById('compReasoning').textContent = score >= 3 ? `${nameA} wins on most metrics.` : score <= 1 ? `${nameB} is the better choice based on value.` : 'Consider your priorities: cost vs. capability vs. ROI.';
+
+            document.getElementById('comparisonResult').classList.remove('hidden');
+        }
+
+        function resetComparison() {
+            state.comparison = { aF: 0, aI: 0, aT: 0, aS: 0, bF: 0, bI: 0, bT: 0, bS: 0 };
+            document.querySelectorAll('#comparison .rating-btn.selected').forEach(b => b.classList.remove('selected'));
+            document.getElementById('toolAName').value = '';
+            document.getElementById('toolBName').value = '';
+            document.getElementById('toolAPrice').value = '';
+            document.getElementById('toolBPrice').value = '';
+            document.getElementById('toolAHours').value = '';
+            document.getElementById('toolBHours').value = '';
+            document.getElementById('comparisonResult').classList.add('hidden');
+        }
+
+        // 30-Day Trial
+        function generateTrialWeeks() {
+            const weeksContainer = document.getElementById('trialWeeks');
+            weeksContainer.innerHTML = Array.from({ length: 4 }, (_, i) => `
+                <div class="week-tracker">
+                    <div class="week-title">Week ${i + 1}</div>
+                    <div class="grid-form">
+                        <div class="form-group">
+                            <label>Hours Saved</label>
+                            <input type="number" class="trial-week-hours" data-week="${i}" min="0" step="0.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Times Used</label>
+                            <input type="number" class="trial-week-times" data-week="${i}" min="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Biggest Win</label>
+                        <input type="text" class="trial-week-win" data-week="${i}" placeholder="e.g., Saved 2 hours on research">
+                    </div>
+                    <div class="form-group">
+                        <label>Biggest Frustration</label>
+                        <input type="text" class="trial-week-frustration" data-week="${i}" placeholder="e.g., Steep learning curve">
+                    </div>
+                    <div class="form-group">
+                        <label>Would I miss it? (Yes/No/Maybe)</label>
+                        <select class="trial-week-miss" data-week="${i}">
+                            <option value="">Select...</option>
+                            <option value="Yes">Yes</option>
+                            <option value="Maybe">Maybe</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function calculateTrial() {
+            const toolName = document.getElementById('trialToolName').value;
+            const startDate = document.getElementById('trialStartDate').value;
+            const endDate = document.getElementById('trialEndDate').value;
+            const threshold = document.getElementById('trialThreshold').value;
+
+            if (!toolName || !startDate || !endDate) {
+                alert('Please fill in tool name and dates');
+                return;
+            }
+
+            let totalHours = 0;
+            document.querySelectorAll('.trial-week-hours').forEach(input => {
+                totalHours += parseFloat(input.value) || 0;
+            });
+
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+            const cost = (parseFloat(document.getElementById('trialToolName').value) || 0); // Placeholder, should get actual cost
+            const valueSaved = totalHours * 100;
+            const roi = valueSaved - cost;
+
+            document.getElementById('trialTotalHours').textContent = `${totalHours.toFixed(1)} hrs`;
+            document.getElementById('trialTotalCost').textContent = `$${cost.toFixed(2)}`;
+            document.getElementById('trialValueSaved').textContent = `$${valueSaved.toFixed(2)}`;
+            document.getElementById('trialNetROI').textContent = roi >= 0 ? `+$${roi.toFixed(2)}` : `-$${Math.abs(roi).toFixed(2)}`;
+
+            let decision = 'EXTEND TRIAL';
+            let reasoning = 'Not enough data to decide. Run through week 4.';
+
+            if (totalHours > 10) {
+                decision = 'STRONG KEEP';
+                reasoning = `This tool is delivering real value (${totalHours.toFixed(1)} hours saved). It's earned its place in your stack.`;
+            } else if (totalHours > 5) {
+                decision = 'KEEP';
+                reasoning = `Solid performance (${totalHours.toFixed(1)} hours saved). The ROI is positive. Continue using.`;
+            } else if (totalHours > 2) {
+                decision = 'MAYBE KEEP';
+                reasoning = `Modest impact so far (${totalHours.toFixed(1)} hours). See if usage increases in month 2.`;
+            } else {
+                decision = 'CANCEL';
+                reasoning = `This tool isn't moving the needle (${totalHours.toFixed(1)} hours saved). Opportunity cost of learning it exceeds the benefit.`;
+            }
+
+            document.getElementById('trialDecision').textContent = decision;
+            document.getElementById('trialReasoning').textContent = reasoning;
+            document.getElementById('trialResult').classList.remove('hidden');
+        }
+
+        function recordTrialDecision(decision) {
+            const toolName = document.getElementById('trialToolName').value;
+            alert(`Trial decision recorded: ${decision.toUpperCase()} ${toolName}`);
+            resetTrial();
+        }
+
+        function resetTrial() {
+            state.trial = { weeks: [null, null, null, null], decision: null };
+            document.getElementById('trialToolName').value = '';
+            document.getElementById('trialStartDate').value = '';
+            document.getElementById('trialEndDate').value = '';
+            document.getElementById('trialThreshold').value = '';
+            document.getElementById('trialWeeks').innerHTML = '';
+            document.getElementById('trialResult').classList.add('hidden');
+        }
+
+        // Initialize
+        initializeAudit();
+    </script>
+</body>
+</html>

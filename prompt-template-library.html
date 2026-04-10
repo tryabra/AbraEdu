@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Template Library | Abra AI Course</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --teal: #2a6171;
+            --teal-light: #e8f0f3;
+            --orange: #e8873a;
+            --orange-light: #fef3e8;
+            --dark: #1a1a2e;
+            --text: #2d2d2d;
+            --text-med: #666;
+            --bg: #fafafa;
+            --white: #ffffff;
+            --border: #e0e0e0;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--dark);
+        }
+
+        .logo-letters {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .logo-m {
+            color: var(--teal);
+        }
+
+        .logo-v {
+            color: var(--orange);
+        }
+
+        .logo-label {
+            font-size: 11px;
+            color: var(--text-med);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .header-title {
+            flex: 1;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .header-title {
+                font-size: 20px;
+            }
+        }
+
+        /* Main Container */
+        main {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            gap: 24px;
+            padding: 24px 20px;
+            overflow: hidden;
+        }
+
+        /* Template Selector */
+        .template-selector {
+            width: 100%;
+            margin-bottom: 24px;
+        }
+
+        .template-selector h3 {
+            font-size: 13px;
+            text-transform: uppercase;
+            color: var(--text-med);
+            margin-bottom: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .template-tabs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 8px;
+        }
+
+        .template-tab {
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            background: var(--white);
+            color: var(--text);
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .template-tab:hover {
+            border-color: var(--teal);
+            color: var(--teal);
+        }
+
+        .template-tab.active {
+            background: var(--teal);
+            color: var(--white);
+            border-color: var(--teal);
+        }
+
+        /* Two-Column Layout */
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        /* Form Panel */
+        .form-panel {
+            display: flex;
+            flex-direction: column;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .panel-header {
+            background: var(--teal-light);
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--teal);
+            margin-bottom: 4px;
+        }
+
+        .panel-header p {
+            font-size: 13px;
+            color: var(--text-med);
+            line-height: 1.4;
+        }
+
+        .form-controls {
+            display: flex;
+            gap: 8px;
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: var(--orange);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: #d67a2d;
+        }
+
+        .btn-secondary {
+            background: var(--orange-light);
+            color: var(--orange);
+        }
+
+        .btn-secondary:hover {
+            background: #fce5d0;
+        }
+
+        .form-fields {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 13px;
+            color: var(--text);
+            background: var(--white);
+            transition: border-color 0.2s ease;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(42, 97, 113, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 12px;
+        }
+
+        .field-hint {
+            font-size: 11px;
+            color: var(--text-med);
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+
+        /* Preview Panel */
+        .preview-panel {
+            display: flex;
+            flex-direction: column;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .preview-header {
+            background: var(--orange-light);
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .preview-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--orange);
+            margin-bottom: 4px;
+        }
+
+        .preview-header p {
+            font-size: 12px;
+            color: var(--text-med);
+        }
+
+        .preview-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #fafafa;
+        }
+
+        .prompt-preview {
+            background: var(--white);
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid var(--teal);
+            line-height: 1.6;
+            font-size: 13px;
+            color: var(--text);
+            font-family: 'Monaco', 'Menlo', monospace;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .rcof-section {
+            margin-bottom: 12px;
+        }
+
+        .rcof-label {
+            font-weight: 700;
+            color: var(--teal);
+            margin-bottom: 4px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .rcof-content {
+            color: var(--text);
+            margin-left: 8px;
+        }
+
+        .copy-feedback {
+            display: none;
+            text-align: center;
+            padding: 12px;
+            background: #d4edda;
+            color: #155724;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .copy-feedback.show {
+            display: block;
+            animation: fadeInOut 2s ease-in-out;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .placeholder-text {
+            color: var(--text-med);
+            font-style: italic;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            main {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 16px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .header-title {
+                font-size: 18px;
+            }
+
+            .container {
+                padding: 16px;
+                gap: 12px;
+            }
+
+            .template-tabs {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                gap: 6px;
+            }
+
+            .template-tab {
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+
+            .form-panel,
+            .preview-panel {
+                border-radius: 8px;
+            }
+
+            .panel-header,
+            .preview-header {
+                padding: 12px 16px;
+            }
+
+            .panel-header h2,
+            .preview-header h2 {
+                font-size: 14px;
+            }
+
+            .form-fields,
+            .preview-content {
+                padding: 16px;
+            }
+
+            .form-controls {
+                padding: 10px 16px;
+                gap: 6px;
+            }
+
+            .btn {
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+
+            .prompt-preview {
+                padding: 12px;
+                font-size: 12px;
+            }
+        }
+
+        /* Scrollbar Styling */
+        .form-fields::-webkit-scrollbar,
+        .preview-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .form-fields::-webkit-scrollbar-track,
+        .preview-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .form-fields::-webkit-scrollbar-thumb,
+        .preview-content::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .form-fields::-webkit-scrollbar-thumb:hover,
+        .preview-content::-webkit-scrollbar-thumb:hover {
+            background: var(--text-med);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div>
+                    <div class="logo-letters"><span class="logo-m">M</span><span class="logo-v">V</span></div>
+                    <div class="logo-label">Mudd Ventures</div>
+                </div>
+                <div style="width: 1px; height: 24px; background: var(--border);"></div>
+                <div class="logo-label" style="margin: 0;">Abra AI</div>
+            </div>
+            <h1 class="header-title">Prompt Template Library</h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="template-selector">
+                <h3>Select a Template</h3>
+                <div class="template-tabs" id="templateTabs"></div>
+            </div>
+
+            <div class="content-wrapper">
+                <!-- Form Panel -->
+                <div class="form-panel">
+                    <div class="panel-header">
+                        <h2 id="templateName">Weekly Content Creation</h2>
+                        <p id="templateDescription">Use this template to generate multiple content pieces for a specific channel.</p>
+                    </div>
+                    <div class="form-controls">
+                        <button class="btn btn-secondary" id="showExampleBtn">Show Example</button>
+                        <button class="btn btn-primary" id="copyBtn">Copy to Clipboard</button>
+                    </div>
+                    <div class="form-fields" id="formFields"></div>
+                </div>
+
+                <!-- Preview Panel -->
+                <div class="preview-panel">
+                    <div class="preview-header">
+                        <h2>Live Prompt Preview</h2>
+                        <p>Your prompt updates as you type</p>
+                    </div>
+                    <div class="preview-content">
+                        <div class="copy-feedback" id="copyFeedback">Copied to clipboard!</div>
+                        <div class="prompt-preview" id="promptPreview"><span class="placeholder-text">Start filling in the fields to see your prompt appear here...</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Template Library
+        const templates = {
+            1: {
+                name: "Weekly Content Creation",
+                description: "Generate LinkedIn posts, blog articles, newsletters, or other content pieces for your audience.",
+                framework: "You are a [TONE] content creator specializing in [BUSINESS DESCRIPTION]. Create [NUMBER] [CONTENT TYPE] pieces for [TARGET AUDIENCE]. Each piece should:\n- Target: [CUSTOMER PROFILE]\n- Differentiate on: [DIFFERENTIATOR]\n- Topic focus: [TOPIC]\n- Goal: [GOAL]\n- Angle: [ANGLE]\n- Length: [LENGTH]\n- Structure: [STRUCTURE NOTES]\n- Include CTA: [CTA TYPE]",
+                fields: [
+                    { key: "CONTENT_TYPE", label: "Content Type", placeholder: "e.g., LinkedIn posts, blog articles, newsletter issues" },
+                    { key: "TARGET_AUDIENCE", label: "Target Audience", placeholder: "e.g., startup founders, marketing directors, small business owners" },
+                    { key: "BUSINESS_DESCRIPTION", label: "Your Business Description", placeholder: "e.g., We help coaches scale online through automation" },
+                    { key: "CUSTOMER_PROFILE", label: "Customer Profile", placeholder: "e.g., Life coaches earning $30-100k/year wanting to reach more clients" },
+                    { key: "DIFFERENTIATOR", label: "Your Differentiator", placeholder: "e.g., Focus on efficiency over complexity, or unique proprietary system" },
+                    { key: "TONE", label: "Tone/Voice", placeholder: "e.g., conversational and encouraging, direct and no-nonsense, playful" },
+                    { key: "NUMBER", label: "Number of Pieces", placeholder: "e.g., 3, 5, 7" },
+                    { key: "TOPIC", label: "Topic/Theme", placeholder: "e.g., common objections to automation, first 30 days of implementation" },
+                    { key: "GOAL", label: "Goal of Content", placeholder: "e.g., Drive newsletter signups, establish authority, get discovery calls" },
+                    { key: "ANGLE", label: "Angle/Hook", placeholder: "e.g., counterintuitive take, behind-the-scenes, case study" },
+                    { key: "LENGTH", label: "Length Per Piece", placeholder: "e.g., 200-300 words, 1000 words, tweet length" },
+                    { key: "STRUCTURE_NOTES", label: "Structure/Format Notes", placeholder: "e.g., 3 bullet points then CTA, story-problem-solution, listicle" },
+                    { key: "CTA_TYPE", label: "Call-to-Action Type", placeholder: "e.g., schedule call, join waitlist, read full article" }
+                ],
+                example: {
+                    CONTENT_TYPE: "LinkedIn posts",
+                    TARGET_AUDIENCE: "B2B SaaS founders",
+                    BUSINESS_DESCRIPTION: "We provide AI-driven customer service automation for service businesses",
+                    CUSTOMER_PROFILE: "Founders with 5-50 employees handling customer support in-house",
+                    DIFFERENTIATOR: "Our system learns from your existing responses, doesn't require templates",
+                    TONE: "Direct and practical, no hype",
+                    NUMBER: "5",
+                    TOPIC: "Time costs of manual customer support",
+                    GOAL: "Generate discovery call bookings",
+                    ANGLE: "Show real time savings numbers",
+                    LENGTH: "150-250 words",
+                    STRUCTURE_NOTES: "Opening hook, 2-3 key points, personal experience, CTA",
+                    CTA_TYPE: "Schedule a 15-minute audit"
+                }
+            },
+            2: {
+                name: "Cold Outreach Email",
+                description: "Write cold emails or DMs to prospects with personalization and clear value proposition.",
+                framework: "Subject/Hook: [PERSONALIZATION_VARIABLE]\n\nYou are a [TONE] sales professional at a [INDUSTRY] company. Write [NUMBER] cold [EMAIL_TYPE] to [PROSPECT_TYPE] experiencing [PAIN_POINT]. We sell [WHAT_YOU_SELL] to [WHO_YOU_SELL_TO] at [PRICE_RANGE].\n\nDifferentiator: [DIFFERENTIATOR]\n\nEach email should:\n- Address their specific situation: [PROSPECT_SITUATION]\n- Acknowledge the pain: [PAIN_POINT]\n- Include: [CTA_TYPE]\n- Word count: [WORD_COUNT]\n- Tone: [TONE]\n- Personalization: Use [PERSONALIZATION_VARIABLE]",
+                fields: [
+                    { key: "INDUSTRY", label: "Your Industry", placeholder: "e.g., SaaS, service-based, agency, consultancy" },
+                    { key: "WHAT_YOU_SELL", label: "What You Sell", placeholder: "e.g., Done-for-you bookkeeping, marketing automation, training" },
+                    { key: "WHO_YOU_SELL_TO", label: "Who You Sell To", placeholder: "e.g., Service-based founders, e-commerce businesses, coaches" },
+                    { key: "PRICE_RANGE", label: "Price Range", placeholder: "e.g., $500-2000/month, one-time $5k, $100-500/project" },
+                    { key: "PROSPECT_SITUATION", label: "Prospect Situation/Context", placeholder: "e.g., Recently launched, in growth stage, post-Series A" },
+                    { key: "PAIN_POINT", label: "Primary Pain Point", placeholder: "e.g., Can't keep up with customer inquiries, manual processes bleeding time" },
+                    { key: "DIFFERENTIATOR", label: "Your Differentiator", placeholder: "e.g., Only provider with industry-specific compliance knowledge" },
+                    { key: "NUMBER", label: "Number of Email Variations", placeholder: "e.g., 2, 3, 5" },
+                    { key: "PROSPECT_TYPE", label: "Prospect Title/Type", placeholder: "e.g., Marketing director, founder, operations manager" },
+                    { key: "CTA_TYPE", label: "Call-to-Action", placeholder: "e.g., Quick 15-min call, reply with feedback, book a demo" },
+                    { key: "WORD_COUNT", label: "Word Count Target", placeholder: "e.g., 75-100 words, 150-200 words" },
+                    { key: "TONE", label: "Tone/Style", placeholder: "e.g., Direct and casual, respectful and formal, witty" },
+                    { key: "PERSONALIZATION_VARIABLE", label: "Personalization Variable", placeholder: "e.g., [FIRST_NAME], [COMPANY_NAME], [RECENT_NEWS]" }
+                ],
+                example: {
+                    INDUSTRY: "SaaS",
+                    WHAT_YOU_SELL: "Customer service automation powered by AI",
+                    WHO_YOU_SELL_TO: "Service businesses with 10-100 employees",
+                    PRICE_RANGE: "$1500-3500/month",
+                    PROSPECT_SITUATION: "Growing service business, recently hit 25+ employees",
+                    PAIN_POINT: "Support tickets are exploding, can't hire fast enough",
+                    DIFFERENTIATOR: "AI learns from your real support history, not templates",
+                    NUMBER: "3",
+                    PROSPECT_TYPE: "VP of Operations",
+                    CTA_TYPE: "Book a 20-minute implementation assessment",
+                    WORD_COUNT: "120-150 words",
+                    TONE: "Conversational, direct, no jargon",
+                    PERSONALIZATION_VARIABLE: "[COMPANY_NAME]'s recent growth announcement"
+                }
+            },
+            3: {
+                name: "Strategy & Analysis",
+                description: "Get strategic advice, competitive analysis, business evaluations, and decision-making guidance.",
+                framework: "You are a [ADVISOR_TYPE] advisor with deep expertise in [BUSINESS_TYPE]. I'm evaluating: [TOPIC]\n\nContext: [BUSINESS_CONTEXT]\n\nI need your analysis on: [ANALYSIS_REQUEST]\n\nProvide [NUMBER] options with pros/cons, then your recommendation.",
+                fields: [
+                    { key: "ADVISOR_TYPE", label: "Advisor Type", placeholder: "e.g., growth strategist, product manager, operations consultant, marketing strategist" },
+                    { key: "BUSINESS_TYPE", label: "Business Type", placeholder: "e.g., B2B SaaS, agency, coaching, e-commerce" },
+                    { key: "TOPIC", label: "Decision/Topic", placeholder: "e.g., Choose between pricing models, Evaluate hiring vs. outsourcing" },
+                    { key: "BUSINESS_CONTEXT", label: "Detailed Business Context", placeholder: "e.g., 5-person team, $50k/month revenue, bootstrapped, trying to hit $100k MRR by year-end" },
+                    { key: "ANALYSIS_REQUEST", label: "What Analysis You Need", placeholder: "e.g., Should we focus on customer retention or new acquisition?, Is it time to hire a full-time marketer?" },
+                    { key: "NUMBER", label: "Number of Options to Evaluate", placeholder: "e.g., 2, 3, 4" }
+                ],
+                example: {
+                    ADVISOR_TYPE: "growth strategist",
+                    BUSINESS_TYPE: "B2B service business",
+                    TOPIC: "Pricing strategy for scaling",
+                    BUSINESS_CONTEXT: "8-person team, $120k/month revenue, mostly word-of-mouth clients, want to 10x in next 2 years",
+                    ANALYSIS_REQUEST: "Should we move from hourly billing to value-based pricing, and what's the implementation plan?",
+                    NUMBER: "3"
+                }
+            },
+            4: {
+                name: "Customer Email Sequence",
+                description: "Create multi-email nurture sequences, onboarding flows, or customer journeys.",
+                framework: "You are a [TONE] email strategist. Create a [SEQUENCE_TYPE] email sequence for [BUSINESS_TYPE].\n\nAudience: [AUDIENCE]\nWhat they know: [WHAT_THEY_KNOW]\nBusiness outcome: [BUSINESS_OUTCOME]\n\nCreate [NUMBER] emails with these jobs: [EMAIL_JOBS]\n\nSpec:\n- Tone: [TONE]\n- Length: [LENGTH] per email\n- Spacing: [SPACING] between emails",
+                fields: [
+                    { key: "BUSINESS_TYPE", label: "Business Type", placeholder: "e.g., SaaS, coaching, agency, membership" },
+                    { key: "NUMBER", label: "Number of Emails", placeholder: "e.g., 3, 5, 7" },
+                    { key: "SEQUENCE_TYPE", label: "Sequence Type", placeholder: "e.g., onboarding, nurture, product launch, re-engagement" },
+                    { key: "AUDIENCE", label: "Audience Description", placeholder: "e.g., New free trial users, newsletter subscribers, past customers" },
+                    { key: "WHAT_THEY_KNOW", label: "What Audience Already Knows", placeholder: "e.g., Who you are and what you do, their main problem but not your solution" },
+                    { key: "BUSINESS_OUTCOME", label: "Business Outcome You Want", placeholder: "e.g., Get them to upgrade, book a call, take first action" },
+                    { key: "EMAIL_JOBS", label: "Email Jobs (comma-separated)", placeholder: "e.g., Build trust, Show social proof, Demonstrate ROI, Remove objections, CTA" },
+                    { key: "TONE", label: "Tone/Voice", placeholder: "e.g., Conversational and warm, direct and urgent, playful" },
+                    { key: "LENGTH", label: "Length Per Email", placeholder: "e.g., 75-100 words, 200-300 words, short and punchy" },
+                    { key: "SPACING", label: "Spacing Between Emails", placeholder: "e.g., 1 day apart, 2-3 days apart, 1 week" }
+                ],
+                example: {
+                    BUSINESS_TYPE: "Online course platform",
+                    NUMBER: "5",
+                    SEQUENCE_TYPE: "post-purchase onboarding",
+                    AUDIENCE: "People who just bought the course",
+                    WHAT_THEY_KNOW: "What the course covers, who we are",
+                    BUSINESS_OUTCOME: "Get them to start Module 1 and show early success",
+                    EMAIL_JOBS: "Celebrate their decision, Set expectations, Overcome procrastination, Share first module strategy, Create community",
+                    TONE: "Warm, encouraging, real",
+                    LENGTH: "150-250 words",
+                    SPACING: "1 day, then every 2 days"
+                }
+            },
+            5: {
+                name: "Meeting Preparation",
+                description: "Prepare for sales calls, client meetings, partnerships, or investor conversations.",
+                framework: "I have a [MEETING_TYPE] scheduled with [PROSPECT_NAME] from [PROSPECT_COMPANY] who is [PROSPECT_ROLE].\n\nMeeting details: [MEETING_DETAILS]\nPurpose: [PURPOSE]\nMy goal: [YOUR_GOAL]\nBackground: [BACKGROUND_HISTORY]\n\nHelp me prepare as a [YOUR_ROLE]. Give me: 1) Key talking points, 2) Questions to ask, 3) Objection handling, 4) How to close.",
+                fields: [
+                    { key: "YOUR_ROLE", label: "Your Role", placeholder: "e.g., Sales rep, founder, consultant, partnership manager" },
+                    { key: "MEETING_TYPE", label: "Meeting Type", placeholder: "e.g., Discovery call, sales conversation, partnership proposal, investor pitch" },
+                    { key: "PROSPECT_NAME", label: "Prospect Name (or title if confidential)", placeholder: "e.g., John Smith, Jane Doe" },
+                    { key: "PROSPECT_ROLE", label: "Prospect Role/Title", placeholder: "e.g., Head of Growth, Founder, VP Operations" },
+                    { key: "PROSPECT_COMPANY", label: "Prospect Company", placeholder: "e.g., TechCorp Inc, Startup XYZ" },
+                    { key: "MEETING_DETAILS", label: "Meeting Details", placeholder: "e.g., 30-min call, in-person lunch meeting, Zoom call" },
+                    { key: "PURPOSE", label: "Meeting Purpose", placeholder: "e.g., Understand their current process, introduce our solution, close the deal" },
+                    { key: "YOUR_GOAL", label: "Your Specific Goal", placeholder: "e.g., Get them to attend a demo, understand their budget, commit to 30-day pilot" },
+                    { key: "BACKGROUND_HISTORY", label: "Background/Context", placeholder: "e.g., Referred by mutual connection, found through LinkedIn, previous conversation on X date" }
+                ],
+                example: {
+                    YOUR_ROLE: "Founder/Sales Lead",
+                    MEETING_TYPE: "Discovery call with potential enterprise client",
+                    PROSPECT_NAME: "Sarah Chen",
+                    PROSPECT_ROLE: "VP of Customer Success",
+                    PROSPECT_COMPANY: "GrowthTech Inc",
+                    MEETING_DETAILS: "30-minute video call",
+                    PURPOSE: "Understand their customer support pain points and see if our solution fits",
+                    YOUR_GOAL: "Get them to agree to a paid pilot in their largest support team",
+                    BACKGROUND_HISTORY: "Warm intro from partner, they recently posted about hiring customer support staff"
+                }
+            },
+            6: {
+                name: "Competitive Positioning",
+                description: "Develop differentiation strategy and competitive positioning analysis.",
+                framework: "I operate in [INDUSTRY]. I do [WHAT_YOU_DO] for [WHO] at [PRICE].\n\nCompetitors: [COMPETITORS_DETAIL]\n\nMy current differentiator: [CURRENT_DIFFERENTIATOR]\n\nConstraint: [CONSTRAINT]\n\nGive me [NUMBER] distinct positioning angles with proof points and go-to-market implications for each.",
+                fields: [
+                    { key: "INDUSTRY", label: "Industry/Market", placeholder: "e.g., B2B SaaS, coaching, e-commerce fulfillment" },
+                    { key: "WHAT_YOU_DO", label: "What You Do", placeholder: "e.g., Automate customer service, teach AI skills" },
+                    { key: "WHO", label: "Who You Do It For", placeholder: "e.g., Bootstrapped founders, agencies, service businesses" },
+                    { key: "PRICE", label: "Your Price Point", placeholder: "e.g., $500/month, $5k project, $97 course" },
+                    { key: "COMPETITORS_DETAIL", label: "Competitors (list 2-4 with brief details)", placeholder: "e.g., Competitor A: $2k/month, enterprise-focused; Competitor B: $50/month, DIY" },
+                    { key: "CURRENT_DIFFERENTIATOR", label: "Your Current Differentiator", placeholder: "e.g., Industry-specific templates, fastest implementation, best customer service" },
+                    { key: "CONSTRAINT", label: "Key Constraint", placeholder: "e.g., Limited budget, smaller team, no enterprise sales infrastructure" },
+                    { key: "NUMBER", label: "Number of Positioning Angles", placeholder: "e.g., 2, 3, 4" }
+                ],
+                example: {
+                    INDUSTRY: "Customer service automation",
+                    WHAT_YOU_DO: "AI-powered customer support automation",
+                    WHO: "Service businesses with 10-50 employees",
+                    PRICE: "$1500-2500/month",
+                    COMPETITORS_DETAIL: "Zendesk: $500+ but complex setup; ChatGPT plugins: cheap but generic; Industry-specific tools: $300 but limited",
+                    CURRENT_DIFFERENTIATOR: "Learns from your actual customer history, not templates",
+                    CONSTRAINT: "Smaller brand, no enterprise sales team",
+                    NUMBER: "3"
+                }
+            },
+            7: {
+                name: "Process Documentation",
+                description: "Create SOPs, internal guides, and process documentation for your team.",
+                framework: "Create a detailed SOP for: [PROCESS_NAME]\n\nCurrent process description: [PROCESS_DESCRIPTION]\n\nDocument this as:\n1. Step-by-step instructions\n2. Decision trees where applicable\n3. Common failure points and how to avoid them\n4. Metrics to track success\n5. Tools/systems involved",
+                fields: [
+                    { key: "PROCESS_NAME", label: "Process Name", placeholder: "e.g., Customer Onboarding, Lead Qualification, Invoice Processing" },
+                    { key: "PROCESS_DESCRIPTION", label: "Current Process Description", placeholder: "e.g., Walk through exactly how this is currently done, step by step, including who does what and what systems are used" }
+                ],
+                example: {
+                    PROCESS_NAME: "Customer Onboarding for Service Clients",
+                    PROCESS_DESCRIPTION: "Currently: 1) Client signs agreement, 2) Account manager sends welcome email, 3) Client fills onboarding form, 4) Technical setup meeting scheduled, 5) We configure their account with initial data, 6) Training call, 7) First support ticket, 8) 30-day check-in. Takes about 2-3 weeks. Uses Slack, Google Forms, Zoom, our platform. Sometimes clients get lost in step 3-4."
+                }
+            },
+            8: {
+                name: "Proposal or Pitch",
+                description: "Write client proposals, pitch decks, or business case documentation.",
+                framework: "Create a [DOCUMENT_TYPE] for [CLIENT_NAME] at [CLIENT_BUSINESS].\n\nTheir problem: [THEIR_PROBLEM]\nOur solution: [OUR_SOLUTION]\nPrice: [PRICE]\nTimeline: [TIMELINE]\nMost important to them: [WHAT_THEY_CARE_ABOUT]\n\nDocument type: [DOCUMENT_TYPE]\nInclude sections: [SPECIFIC_SECTIONS]\n\nUse [BUSINESS_TYPE] language and framing.",
+                fields: [
+                    { key: "BUSINESS_TYPE", label: "Your Business Type", placeholder: "e.g., B2B SaaS, agency, consulting, software development" },
+                    { key: "CLIENT_NAME", label: "Client Name", placeholder: "e.g., Acme Corp, Tech Startup XYZ" },
+                    { key: "CLIENT_BUSINESS", label: "What Client Business Does", placeholder: "e.g., E-commerce, SaaS, agency, services" },
+                    { key: "THEIR_PROBLEM", label: "Their Problem/Challenge", placeholder: "e.g., Can't keep up with customer inquiries, need to scale without hiring" },
+                    { key: "OUR_SOLUTION", label: "Your Solution", placeholder: "e.g., AI-powered support automation that learns from your existing processes" },
+                    { key: "PRICE", label: "Price/Investment", placeholder: "e.g., $2500/month, $15k one-time, $500-2k depending on scale" },
+                    { key: "TIMELINE", label: "Timeline/Implementation", placeholder: "e.g., 2 weeks to go live, 30 days from signing, within 48 hours" },
+                    { key: "WHAT_THEY_CARE_ABOUT", label: "What They Care About Most", placeholder: "e.g., ROI and time savings, speed to value, minimal disruption to current flow" },
+                    { key: "DOCUMENT_TYPE", label: "Document Type", placeholder: "e.g., proposal, one-pager, pitch deck outline, scope of work" },
+                    { key: "SPECIFIC_SECTIONS", label: "Specific Sections Wanted", placeholder: "e.g., Executive summary, Implementation timeline, Success metrics, Terms, FAQ" }
+                ],
+                example: {
+                    BUSINESS_TYPE: "SaaS",
+                    CLIENT_NAME: "GrowthTech Inc",
+                    CLIENT_BUSINESS: "B2B marketing software provider",
+                    THEIR_PROBLEM: "Support team getting buried, customers frustrated with response times",
+                    OUR_SOLUTION: "AI-powered first-response automation that handles 60-70% of inquiries automatically",
+                    PRICE: "$2000/month",
+                    TIMELINE: "Live within 2 weeks",
+                    WHAT_THEY_CARE_ABOUT: "Customer satisfaction scores and team bandwidth",
+                    DOCUMENT_TYPE: "One-page proposal",
+                    SPECIFIC_SECTIONS: "Problem statement, Proposed solution, Expected outcomes, Investment and timeline, Next steps"
+                }
+            },
+            9: {
+                name: "Data Analysis & Reporting",
+                description: "Analyze data, find patterns, and create actionable insights and recommendations.",
+                framework: "Perform a [ANALYSIS_TYPE] analysis for [BUSINESS_TYPE].\n\nData description: [DATA_DESCRIPTION]\nTime period: [TIME_PERIOD]\nTrying to understand: [WHAT_TO_UNDERSTAND]\nThis informs decisions on: [DECISIONS_THIS_INFORMS]\n\nSpecific questions: [SPECIFIC_QUESTIONS]\n\nProvide [NUMBER] actionable recommendations with expected impact.",
+                fields: [
+                    { key: "ANALYSIS_TYPE", label: "Analysis Type", placeholder: "e.g., Revenue trend, Customer churn, Marketing channel effectiveness" },
+                    { key: "BUSINESS_TYPE", label: "Business Type", placeholder: "e.g., SaaS, agency, coaching, e-commerce" },
+                    { key: "DATA_DESCRIPTION", label: "Data Description", placeholder: "e.g., Monthly revenue, customer list with churn status, marketing spend by channel" },
+                    { key: "TIME_PERIOD", label: "Time Period", placeholder: "e.g., Last 12 months, Last 90 days, Year-over-year comparison" },
+                    { key: "WHAT_TO_UNDERSTAND", label: "What You're Trying to Understand", placeholder: "e.g., Why is churn spiking?, Which channels drive highest LTV customers?" },
+                    { key: "DECISIONS_THIS_INFORMS", label: "Decisions This Informs", placeholder: "e.g., Budget allocation for next quarter, Retention strategy, Sales focus areas" },
+                    { key: "SPECIFIC_QUESTIONS", label: "Specific Questions to Answer", placeholder: "e.g., Are enterprise customers more profitable? Do marketing campaigns drive different customer segments?" },
+                    { key: "NUMBER", label: "Number of Recommendations", placeholder: "e.g., 3, 5, 7" }
+                ],
+                example: {
+                    ANALYSIS_TYPE: "Customer cohort analysis",
+                    BUSINESS_TYPE: "SaaS subscription",
+                    DATA_DESCRIPTION: "Monthly MRR, churn rate by customer acquisition channel, customer support tickets, feature usage data",
+                    TIME_PERIOD: "Last 18 months",
+                    WHAT_TO_UNDERSTAND: "Which cohorts are most profitable and why some have 60% churn after 6 months",
+                    DECISIONS_THIS_INFORMS: "Should we shift marketing spend?, Do we need a different onboarding for certain customer types?",
+                    SPECIFIC_QUESTIONS: "What's the difference in LTV between web and LinkedIn cohorts? Does early feature adoption predict retention?",
+                    NUMBER: "4"
+                }
+            },
+            10: {
+                name: "Problem Diagnosis",
+                description: "Get systematic diagnosis of business problems and root cause analysis.",
+                framework: "I'm a [ADVISOR_TYPE] helping diagnose a problem at a [BUSINESS_TYPE].\n\nProblem symptom: [PROBLEM_SYMPTOM]\nWhat they've already tried: [PREVIOUS_ATTEMPTS]\nCurrent metrics: [CURRENT_METRICS]\nMy hypothesis: [HYPOTHESIS]\n\nWalk me through [NUMBER] possible root causes. For each: Why it could be the issue, How to test for it, What fixes look like.",
+                fields: [
+                    { key: "ADVISOR_TYPE", label: "Advisor Role", placeholder: "e.g., Growth advisor, operations consultant, product strategist" },
+                    { key: "BUSINESS_TYPE", label: "Business Type", placeholder: "e.g., B2B SaaS, agency, coaching, e-commerce" },
+                    { key: "PROBLEM_SYMPTOM", label: "Problem Symptom (What's happening?)", placeholder: "e.g., Revenue flatlined for 3 months, Customer churn jumped from 5% to 12%" },
+                    { key: "PREVIOUS_ATTEMPTS", label: "What They've Already Tried", placeholder: "e.g., Increased marketing spend, reduced pricing, did a product update" },
+                    { key: "CURRENT_METRICS", label: "Current Relevant Metrics", placeholder: "e.g., $50k MRR, 120 customers, 15% monthly churn, 8% conversion rate" },
+                    { key: "HYPOTHESIS", label: "Your Working Hypothesis", placeholder: "e.g., I think it's a pricing issue, not a product issue, but not sure" },
+                    { key: "NUMBER", label: "Number of Root Causes to Explore", placeholder: "e.g., 2, 3, 4" }
+                ],
+                example: {
+                    ADVISOR_TYPE: "Growth strategist",
+                    BUSINESS_TYPE: "B2B SaaS",
+                    PROBLEM_SYMPTOM: "Sales velocity dropped 40% in last 6 weeks even though traffic is up",
+                    PREVIOUS_ATTEMPTS: "Tweaked landing page, increased ad spend, sent email campaign to warm leads",
+                    CURRENT_METRICS: "Getting 2x the demo requests but only closing 15% (down from 35%)",
+                    HYPOTHESIS: "Something changed in the sales process or our fit isn't clear to leads anymore",
+                    NUMBER: "3"
+                }
+            }
+        };
+
+        let currentTemplate = 1;
+        const templateOrder = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+        // Initialize Template Tabs
+        function initTemplateTabs() {
+            const tabsContainer = document.getElementById('templateTabs');
+            templateOrder.forEach(id => {
+                const tab = document.createElement('button');
+                tab.className = 'template-tab' + (id === 1 ? ' active' : '');
+                tab.textContent = templates[id].name.split(' ').slice(0, 2).join(' ');
+                tab.addEventListener('click', () => selectTemplate(id));
+                tabsContainer.appendChild(tab);
+            });
+        }
+
+        // Select Template
+        function selectTemplate(id) {
+            currentTemplate = id;
+
+            // Update active tab
+            document.querySelectorAll('.template-tab').forEach((tab, idx) => {
+                tab.classList.toggle('active', idx === templateOrder.indexOf(id));
+            });
+
+            // Update form
+            renderForm();
+            updatePreview();
+        }
+
+        // Render Form Fields
+        function renderForm() {
+            const template = templates[currentTemplate];
+            document.getElementById('templateName').textContent = template.name;
+            document.getElementById('templateDescription').textContent = template.description;
+
+            const formFields = document.getElementById('formFields');
+            formFields.innerHTML = '';
+
+            template.fields.forEach(field => {
+                const group = document.createElement('div');
+                group.className = 'form-group';
+
+                const label = document.createElement('label');
+                label.textContent = field.label;
+                label.htmlFor = field.key;
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.id = field.key;
+                input.placeholder = field.placeholder;
+                input.addEventListener('input', updatePreview);
+
+                group.appendChild(label);
+                group.appendChild(input);
+
+                const hint = document.createElement('div');
+                hint.className = 'field-hint';
+                hint.textContent = field.placeholder;
+                group.appendChild(hint);
+
+                formFields.appendChild(group);
+            });
+        }
+
+        // Update Live Preview
+        function updatePreview() {
+            const template = templates[currentTemplate];
+            let prompt = template.framework;
+
+            template.fields.forEach(field => {
+                const value = document.getElementById(field.key).value || `[${field.key}]`;
+                prompt = prompt.replace(new RegExp(`\\[${field.key}\\]`, 'g'), value);
+            });
+
+            const preview = document.getElementById('promptPreview');
+            preview.textContent = prompt;
+        }
+
+        // Show Example
+        document.getElementById('showExampleBtn').addEventListener('click', () => {
+            const template = templates[currentTemplate];
+            template.fields.forEach(field => {
+                const input = document.getElementById(field.key);
+                if (template.example[field.key]) {
+                    input.value = template.example[field.key];
+                }
+            });
+            updatePreview();
+        });
+
+        // Copy to Clipboard
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            const text = document.getElementById('promptPreview').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const feedback = document.getElementById('copyFeedback');
+                feedback.classList.add('show');
+                setTimeout(() => {
+                    feedback.classList.remove('show');
+                }, 2000);
+            });
+        });
+
+        // Initialize
+        initTemplateTabs();
+        renderForm();
+        updatePreview();
+    </script>
+</body>
+</html>

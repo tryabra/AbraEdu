@@ -577,7 +577,7 @@
     <textarea class="prompt-input" id="originalPrompt" placeholder="The original prompt you used to get this output..."></textarea>
   </div>
 
-  <button class="evaluate-btn" id="evaluateBtn" onclick="evaluate()">
+  <button class="evaluate-btn" id="evaluateBtn" onclick="evaluateOutput()">
     <span>&#9889;</span> Evaluate This Output
   </button>
 
@@ -750,7 +750,7 @@ Evaluation rules:
     return JSON.parse(content);
   }
 
-  async function evaluate() {
+  async function evaluateOutput() {
     const output = document.getElementById('aiOutput').value.trim();
     const errorMsg = document.getElementById('errorMsg');
     errorMsg.classList.remove('show');
